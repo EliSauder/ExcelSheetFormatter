@@ -4,8 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProcessTrackerBOMFormat"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Process Tracker BOM Format" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Process Tracker BOM Format" 
+        MinHeight="450"
+        MinWidth="800"
+        Height="800" 
+        Width="1200" 
+        ResizeMode="CanResize" 
+        WindowStartupLocation="CenterOwner" 
+        WindowStyle="SingleBorderWindow" 
+        Icon="./Resources/favicon.ico">
+
     <Grid>
         
     </Grid>
