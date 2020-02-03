@@ -16,7 +16,23 @@
         WindowStyle="SingleBorderWindow" 
         Icon="./Resources/favicon.ico">
 
-    <Grid>
-        
+    <Window.Resources>
+        <GridLength x:Key="borderWidth">20</GridLength>
+        <!--<sys:String x:Key="borderWidth">20</sys:String>-->
+    </Window.Resources>
+    
+    <Grid RenderTransformOrigin="0.486,0.499">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{StaticResource borderWidth}" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="{StaticResource borderWidth}" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{StaticResource borderWidth}" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="{StaticResource borderWidth}" />
+        </Grid.RowDefinitions>
     </Grid>
 </Window>
