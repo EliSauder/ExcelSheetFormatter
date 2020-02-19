@@ -15,7 +15,9 @@
         WindowStartupLocation="CenterOwner" 
         WindowStyle="SingleBorderWindow" 
         Icon="./Resources/favicon.ico"
-        AllowsTransparency="False">
+        AllowsTransparency="False"
+        
+        MouseDown="Window_MouseDown">
 
     <Window.Resources>
         <GridLength x:Key="borderWidth">20</GridLength>
@@ -49,7 +51,7 @@
                 <RowDefinition Height="{StaticResource borderWidth}" />
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="1" Grid.Column="1" Background="#FFF" CornerRadius="5">
+            <Border x:Name="FormBorder" Grid.Row="1" Grid.Column="1" Background="#FFF" CornerRadius="5" Focusable="True">
                 <Border.Effect>
                     <DropShadowEffect 
                         ShadowDepth="0" 
@@ -58,7 +60,7 @@
                         Opacity="0.6" 
                         BlurRadius="5"/>
                 </Border.Effect>
-                <Grid Width="400" >
+                <Grid Width="400">
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -81,13 +83,16 @@
                         <TextBox 
                             VerticalContentAlignment="Center" 
                             TextAlignment="Center" 
-                            x:Name="ProductNumber" 
+                            x:Name="ProductNumber"
+                            CharacterCasing="Upper"
                             Width="auto" 
                             Height="50" 
                             FontSize="30" 
                             Background="#EEE" 
                             BorderBrush="#333" 
-                            BorderThickness="2">
+                            BorderThickness="2"
+                            
+                            LostFocus="ProductNumber_LostFocus">
                             <TextBox.Resources>
                                 <Style TargetType="{x:Type Border}">
                                     <Setter Property="CornerRadius" Value="3"/>
