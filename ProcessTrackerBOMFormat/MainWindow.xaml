@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:ProcessTrackerBOMFormat"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Process Tracker BOM Format" 
         MinHeight="450"
         MinWidth="455"
         Height="800" 
@@ -15,8 +14,7 @@
         WindowStartupLocation="CenterOwner" 
         WindowStyle="SingleBorderWindow" 
         Icon="./Resources/favicon.ico"
-        AllowsTransparency="False"
-        
+        AllowsTransparency="False" 
         MouseDown="Window_MouseDown">
 
     <Window.Resources>
