@@ -3,10 +3,8 @@
 namespace ProcessTrackerBOMFormat.Configurations {
     public class CustomConfigBomColumnFieldCollection : ConfigurationElementCollection {
 
-        public CustomConfigBomColumnFieldCollection() { }
-
         public override ConfigurationElementCollectionType CollectionType {
-            get { return ConfigurationElementCollectionType.AddRemoveClearMap; }
+            get { return ConfigurationElementCollectionType.BasicMap; }
         }
 
         protected override ConfigurationElement CreateNewElement() {
@@ -33,7 +31,15 @@ namespace ProcessTrackerBOMFormat.Configurations {
             return BaseIndexOf(field);
         }
 
-        public void Add(CustomConfigBomColumnField field) {
+        public int IndexOf(string name) {
+            name = name.ToLower();
+            for (int idx = 0; idx < base.Count; idx++) {
+                if (this[idx].Name.ToLower() == name) return idx;
+            }
+            return -1;
+        }
+
+        /*public void Add(CustomConfigBomColumnField field) {
             BaseAdd(field);
         }
 
@@ -57,7 +63,7 @@ namespace ProcessTrackerBOMFormat.Configurations {
 
         public void Clear() {
             BaseClear();
-        }
+        }*/
 
         protected override string ElementName {
             get { return "field"; }

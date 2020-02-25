@@ -1,14 +1,20 @@
 ﻿using System.Configuration;
 
 namespace ProcessTrackerBOMFormat.Configurations {
-    public class CustomConfigBomUniqueKey : ConfigurationSection {
+    public class CustomConfigBomUniqueKey : ConfigurationElement {
 
         [ConfigurationProperty("whereLook", IsRequired = true)]
-        [RegexStringValidator("^[A-Z]+[0-9]+(?:(?:,[A-Z]+[0-9]+)+)?$")]
-        public string WhereLook { get; set; }
+        [RegexStringValidator(@"^(\w+\d+(?:(?:,\w+\d+)+)?|)$")]
+        public string WhereLook { 
+            get { return (string)this["whereLook"]; } 
+            set { this["whereLook"] = value; } 
+        }
 
         [ConfigurationProperty("valueFind", IsRequired = true)]
-        public string ValueFind { get; set; }
+        public string ValueFind {
+            get { return (string)this["valueFind"]; }
+            set { this["valueFind"] = value; }
+        }
 
     }
 }

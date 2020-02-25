@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -13,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
+using ProcessTrackerBOMFormat.Configurations;
 
 namespace ProcessTrackerBOMFormat {
     /// <summary>
@@ -23,12 +27,25 @@ namespace ProcessTrackerBOMFormat {
         private Regex partNumberRegex;
         private Brush defaultPartNumberBorderBrush;
 
+        private CustomConfigBomSection bomConfigurations;
+
         public MainWindow() {
             InitializeComponent();
 
-            partNumberRegex = new Regex("^((?:(?:G|T)\\d{5}(?:(?=-)-\\d{1,3}(?:(?=[A-Z])[A-Z]\\d|)|))|(?:(?:V)?\\d{6,7}Z))$");
+            partNumberRegex = new Regex(@"^((?:(?:G|T)\\d{5}(?:(?=-)-\\d{1,3}(?:(?=[A-Z])[A-Z]\\d|)|))|(?:(?:V)?\\d{6,7}Z))$");
 
             defaultPartNumberBorderBrush = ProductNumber.BorderBrush;
+
+            try {
+                bomConfigurations = (CustomConfigBomSection)ConfigurationManager.GetSection("applicationConfiguration/boms");
+                
+                foreach (CustomConfigBom bom in bomConfigurations.BomCollection) {
+                    Console.WriteLine("Bom Name: " + bom.Name);
+                }
+            } catch(Exception e) {
+                bomConfigurations = null;
+                Console.WriteLine("error occured " + e.Message);
+            }
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e) {
