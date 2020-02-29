@@ -46,28 +46,6 @@ namespace ProcessTrackerBOMFormat.Configuration {
             BaseAdd(element, false);
         }
 
-        //protected override string ElementName {
-        //    get { return "bom"; }
-        //}
-
-        public void Remove(ConfigurationElementBom field) {
-            if (BaseIndexOf(field) >= 0) {
-                BaseRemove(field.Name);
-            }
-        }
-
-        public void RemoveAt(int index) {
-            BaseRemoveAt(index);
-        }
-
-        public void Remove(string name) {
-            BaseRemove(name);
-        }
-
-        public void Clear() {
-            BaseClear();
-        }
-
         protected override string ElementName {
             get { return "bom"; }
         }

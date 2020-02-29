@@ -2,16 +2,6 @@
 
 namespace ProcessTrackerBOMFormat.Configuration {
     public class ConfigurationElementColumn : ConfigurationElement {
-        public ConfigurationElementColumn() { }
-        public ConfigurationElementColumn(string name, bool enabled, string header, string output, int order, bool oRide, bool required) {
-            this.Name = name;
-            this.Header = header;
-            this.Enabled = enabled;
-            this.Output = output;
-            this.Order = order;
-            this.Override = oRide;
-            this.Required = required;
-        }
 
         [ConfigurationProperty("name", IsKey = true, IsRequired = true)]
         public string Name {

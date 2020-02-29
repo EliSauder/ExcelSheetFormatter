@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ProcessTrackerBOMFormat.Utility {
+﻿namespace ProcessTrackerBOMFormat.Utility {
     public static class StringEvaluation {
 
         public enum StringEvalCondition {
@@ -27,13 +21,6 @@ namespace ProcessTrackerBOMFormat.Utility {
                 default:
                     return false;
             }
-        }
-
-        public static StringEvalCondition getCondition(string condition) {
-            foreach(StringEvalCondition evalCondition in (StringEvalCondition[]) Enum.GetValues(typeof(StringEvalCondition))) {
-                if (evalCondition.ToString().Equals(condition.ToUpper())) return evalCondition;
-            }
-            return StringEvalCondition.EQUALS;
         }
     }
 }
