@@ -73,12 +73,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Configurations\CustomConfigBomSection.cs" />
-    <Compile Include="Configurations\CustomConfigBomElement.cs" />
-    <Compile Include="Configurations\CustomConfigBomCollection.cs" />
-    <Compile Include="Configurations\CustomConfigBomColumnElement.cs" />
-    <Compile Include="Configurations\CustomConfigBomColumnCollection.cs" />
-    <Compile Include="Configurations\CustomConfigBomUniqueKeyElement.cs" />
+    <Compile Include="Configuration\ConfigurationElementPopulate.cs" />
+    <Compile Include="Configuration\ConfigurationCollectionPopulations.cs" />
+    <Compile Include="Configuration\ConfigurationSectionBoms.cs" />
+    <Compile Include="Configuration\ConfigurationElementBom.cs" />
+    <Compile Include="Configuration\ConfigurationCollectionBoms.cs" />
+    <Compile Include="Configuration\ConfigurationElementColumn.cs" />
+    <Compile Include="Configuration\ConfigurationCollectionColumns.cs" />
+    <Compile Include="Configuration\ConfigurationElementUniqueKey.cs" />
+    <Compile Include="Utility\StringEvaluation.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

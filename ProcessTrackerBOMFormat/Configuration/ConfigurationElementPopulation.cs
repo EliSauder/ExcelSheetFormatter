@@ -4,9 +4,10 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProcessTrackerBOMFormat.Utility;
 
-namespace ProcessTrackerBOMFormat.Configurations {
-    class ConfigurationElementPopulate : ConfigurationElement {
+namespace ProcessTrackerBOMFormat.Configuration {
+    class ConfigurationElementPopulation : ConfigurationElement {
 
         [ConfigurationProperty("toColumn", IsRequired = true)]
         public string ToColumn {

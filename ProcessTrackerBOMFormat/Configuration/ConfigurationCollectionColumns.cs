@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace ProcessTrackerBOMFormat.Configurations {
+namespace ProcessTrackerBOMFormat.Configuration {
     public class ConfigurationCollectionColumns : ConfigurationElementCollection {
 
         public override ConfigurationElementCollectionType CollectionType {

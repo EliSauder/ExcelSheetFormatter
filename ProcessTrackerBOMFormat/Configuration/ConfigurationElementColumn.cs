@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace ProcessTrackerBOMFormat.Configurations {
+namespace ProcessTrackerBOMFormat.Configuration {
     public class ConfigurationElementColumn : ConfigurationElement {
         public ConfigurationElementColumn() { }
         public ConfigurationElementColumn(string name, bool enabled, string header, string output, int order, bool oRide, bool required) {

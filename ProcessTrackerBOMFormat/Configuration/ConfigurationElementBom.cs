@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace ProcessTrackerBOMFormat.Configurations {
+namespace ProcessTrackerBOMFormat.Configuration {
     public class ConfigurationElementBom : ConfigurationElement {
 
         [ConfigurationProperty("name", IsKey = true, IsRequired = true)]

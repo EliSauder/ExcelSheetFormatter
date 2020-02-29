@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace ProcessTrackerBOMFormat.Configurations {
+namespace ProcessTrackerBOMFormat.Configuration {
     public class ConfigurationElementUniqueKey : ConfigurationElement {
 
         [ConfigurationProperty("whereLook", IsRequired = true)]

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProcessTrackerBOMFormat.Configurations {
+namespace ProcessTrackerBOMFormat.Utility {
     public static class StringEvaluation {
 
         public enum StringEvalCondition {

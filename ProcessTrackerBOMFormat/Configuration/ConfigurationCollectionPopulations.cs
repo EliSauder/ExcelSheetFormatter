@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProcessTrackerBOMFormat.Configurations {
+namespace ProcessTrackerBOMFormat.Configuration {
     class ConfigurationCollectionPopulations : ConfigurationElementCollection{
         public override ConfigurationElementCollectionType CollectionType {
             get { return ConfigurationElementCollectionType.BasicMap; }
