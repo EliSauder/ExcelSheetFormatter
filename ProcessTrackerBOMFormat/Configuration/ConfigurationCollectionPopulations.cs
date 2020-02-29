@@ -12,26 +12,26 @@ namespace ProcessTrackerBOMFormat.Configuration {
         }
 
         protected override ConfigurationElement CreateNewElement() {
-            return new ConfigurationElementColumn();
+            return new ConfigurationElementPopulation();
         }
 
         protected override object GetElementKey(ConfigurationElement element) {
-            return ((ConfigurationElementColumn)element).Name;
+            return ((ConfigurationElementPopulation)element).Name;
         }
 
-        public ConfigurationElementColumn this[int index] {
-            get { return (ConfigurationElementColumn)BaseGet(index); }
+        public ConfigurationElementPopulation this[int index] {
+            get { return (ConfigurationElementPopulation)BaseGet(index); }
             set {
                 if (BaseGet(index) != null) BaseRemoveAt(index);
                 BaseAdd(index, value);
             }
         }
 
-        new public ConfigurationElementColumn this[string name] {
-            get { return (ConfigurationElementColumn)BaseGet(name); }
+        new public ConfigurationElementPopulation this[string name] {
+            get { return (ConfigurationElementPopulation)BaseGet(name); }
         }
 
-        public int IndexOf(ConfigurationElementColumn field) {
+        public int IndexOf(ConfigurationElementPopulation field) {
             return BaseIndexOf(field);
         }
 

@@ -9,6 +9,12 @@ using ProcessTrackerBOMFormat.Utility;
 namespace ProcessTrackerBOMFormat.Configuration {
     class ConfigurationElementPopulation : ConfigurationElement {
 
+        [ConfigurationProperty("name", IsRequired = true, IsKey = true)]
+        public string Name {
+            get { return (string)this["name"]; }
+            set { this["name"] = value; }
+        }
+
         [ConfigurationProperty("toColumn", IsRequired = true)]
         public string ToColumn {
             get { return (string)this["toColumn"]; }
