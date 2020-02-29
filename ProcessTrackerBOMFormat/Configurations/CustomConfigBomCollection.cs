@@ -4,7 +4,7 @@ namespace ProcessTrackerBOMFormat.Configurations {
     public class CustomConfigBomCollection : ConfigurationElementCollection {
 
         public CustomConfigBomCollection() {
-            CustomConfigBom bom = (CustomConfigBom)CreateNewElement();
+            CustomConfigBomElement bom = (CustomConfigBomElement)CreateNewElement();
             if(!bom.Name.Equals("")) {
                 Add(bom);
             }
@@ -15,30 +15,30 @@ namespace ProcessTrackerBOMFormat.Configurations {
         }
 
         protected override ConfigurationElement CreateNewElement() {
-            return new CustomConfigBom();
+            return new CustomConfigBomElement();
         }
 
         protected override object GetElementKey(ConfigurationElement element) {
-            return ((CustomConfigBom)element).Name;
+            return ((CustomConfigBomElement)element).Name;
         }
 
-        public CustomConfigBom this[int index] {
-            get { return (CustomConfigBom)BaseGet(index); }
+        public CustomConfigBomElement this[int index] {
+            get { return (CustomConfigBomElement)BaseGet(index); }
             set {
                 if (BaseGet(index) != null) BaseRemoveAt(index);
                 BaseAdd(index, value);
             }
         }
 
-        new public CustomConfigBom this[string name] {
-            get { return (CustomConfigBom)BaseGet(name); }
+        new public CustomConfigBomElement this[string name] {
+            get { return (CustomConfigBomElement)BaseGet(name); }
         }
 
-        public int IndexOf(CustomConfigBom field) {
+        public int IndexOf(CustomConfigBomElement field) {
             return BaseIndexOf(field);
         }
 
-        public void Add(CustomConfigBom field) {
+        public void Add(CustomConfigBomElement field) {
             BaseAdd(field);
         }
 
@@ -50,7 +50,7 @@ namespace ProcessTrackerBOMFormat.Configurations {
         //    get { return "bom"; }
         //}
 
-        public void Remove(CustomConfigBom field) {
+        public void Remove(CustomConfigBomElement field) {
             if (BaseIndexOf(field) >= 0) {
                 BaseRemove(field.Name);
             }

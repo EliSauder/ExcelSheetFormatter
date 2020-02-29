@@ -1,9 +1,9 @@
 ﻿using System.Configuration;
 
 namespace ProcessTrackerBOMFormat.Configurations {
-    public class CustomConfigBomColumnField : ConfigurationElement {
-        public CustomConfigBomColumnField() { }
-        public CustomConfigBomColumnField(string name, bool enabled, string header, string output, int order, bool oRide) {
+    public class CustomConfigBomColumnElement : ConfigurationElement {
+        public CustomConfigBomColumnElement() { }
+        public CustomConfigBomColumnElement(string name, bool enabled, string header, string output, int order, bool oRide) {
             this.Name = name;
             this.Header = header;
             this.Enabled = enabled;

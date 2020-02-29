@@ -1,33 +1,33 @@
 ﻿using System.Configuration;
 
 namespace ProcessTrackerBOMFormat.Configurations {
-    public class CustomConfigBomColumnFieldCollection : ConfigurationElementCollection {
+    public class CustomConfigBomColumnCollection : ConfigurationElementCollection {
 
         public override ConfigurationElementCollectionType CollectionType {
             get { return ConfigurationElementCollectionType.BasicMap; }
         }
 
         protected override ConfigurationElement CreateNewElement() {
-            return new CustomConfigBomColumnField();
+            return new CustomConfigBomColumnElement();
         }
 
         protected override object GetElementKey(ConfigurationElement element) {
-            return ((CustomConfigBomColumnField)element).Name;
+            return ((CustomConfigBomColumnElement)element).Name;
         }
 
-        public CustomConfigBomColumnField this[int index] {
-            get { return (CustomConfigBomColumnField)BaseGet(index); }
+        public CustomConfigBomColumnElement this[int index] {
+            get { return (CustomConfigBomColumnElement)BaseGet(index); }
             set {
                 if (BaseGet(index) != null) BaseRemoveAt(index);
                 BaseAdd(index, value);
             }
         }
 
-        new public CustomConfigBomColumnField this[string name] {
-            get { return (CustomConfigBomColumnField)BaseGet(name); }
+        new public CustomConfigBomColumnElement this[string name] {
+            get { return (CustomConfigBomColumnElement)BaseGet(name); }
         }
 
-        public int IndexOf(CustomConfigBomColumnField field) {
+        public int IndexOf(CustomConfigBomColumnElement field) {
             return BaseIndexOf(field);
         }
 
