@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 
 namespace ProcessTrackerBOMFormat.Configurations {
-    public class CustomConfigBomSection : ConfigurationSection {
+    public class ConfigurationSectionBoms : ConfigurationSection {
 
         //public CustomConfigBomSection() {
         //    CustomConfigBom columnField = new CustomConfigBom();
@@ -9,9 +9,9 @@ namespace ProcessTrackerBOMFormat.Configurations {
         //}
 
         [ConfigurationProperty("", IsDefaultCollection = true)]
-        public CustomConfigBomCollection BomCollection {
+        public ConfigurationCollectionBoms BomCollection {
             get {
-                CustomConfigBomCollection bomCollection = (CustomConfigBomCollection)base[""];
+                ConfigurationCollectionBoms bomCollection = (ConfigurationCollectionBoms)base[""];
                 return bomCollection; 
             }
             //set { CustomConfigBomCollection columnFields = value; }

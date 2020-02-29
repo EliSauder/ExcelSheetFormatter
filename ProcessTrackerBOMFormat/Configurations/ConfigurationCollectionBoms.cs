@@ -1,10 +1,10 @@
 ﻿using System.Configuration;
 
 namespace ProcessTrackerBOMFormat.Configurations {
-    public class CustomConfigBomCollection : ConfigurationElementCollection {
+    public class ConfigurationCollectionBoms : ConfigurationElementCollection {
 
-        public CustomConfigBomCollection() {
-            CustomConfigBomElement bom = (CustomConfigBomElement)CreateNewElement();
+        public ConfigurationCollectionBoms() {
+            ConfigurationElementBom bom = (ConfigurationElementBom)CreateNewElement();
             if(!bom.Name.Equals("")) {
                 Add(bom);
             }
@@ -15,30 +15,30 @@ namespace ProcessTrackerBOMFormat.Configurations {
         }
 
         protected override ConfigurationElement CreateNewElement() {
-            return new CustomConfigBomElement();
+            return new ConfigurationElementBom();
         }
 
         protected override object GetElementKey(ConfigurationElement element) {
-            return ((CustomConfigBomElement)element).Name;
+            return ((ConfigurationElementBom)element).Name;
         }
 
-        public CustomConfigBomElement this[int index] {
-            get { return (CustomConfigBomElement)BaseGet(index); }
+        public ConfigurationElementBom this[int index] {
+            get { return (ConfigurationElementBom)BaseGet(index); }
             set {
                 if (BaseGet(index) != null) BaseRemoveAt(index);
                 BaseAdd(index, value);
             }
         }
 
-        new public CustomConfigBomElement this[string name] {
-            get { return (CustomConfigBomElement)BaseGet(name); }
+        new public ConfigurationElementBom this[string name] {
+            get { return (ConfigurationElementBom)BaseGet(name); }
         }
 
-        public int IndexOf(CustomConfigBomElement field) {
+        public int IndexOf(ConfigurationElementBom field) {
             return BaseIndexOf(field);
         }
 
-        public void Add(CustomConfigBomElement field) {
+        public void Add(ConfigurationElementBom field) {
             BaseAdd(field);
         }
 
@@ -50,7 +50,7 @@ namespace ProcessTrackerBOMFormat.Configurations {
         //    get { return "bom"; }
         //}
 
-        public void Remove(CustomConfigBomElement field) {
+        public void Remove(ConfigurationElementBom field) {
             if (BaseIndexOf(field) >= 0) {
                 BaseRemove(field.Name);
             }

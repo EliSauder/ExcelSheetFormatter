@@ -16,7 +16,7 @@ namespace ProcessTrackerBOMFormat {
         private Regex partNumberRegex;
         private Brush defaultPartNumberBorderBrush;
 
-        private CustomConfigBomSection bomConfigurations;
+        private ConfigurationSectionBoms bomConfigurations;
 
         public MainWindow() {
             InitializeComponent();
@@ -26,11 +26,11 @@ namespace ProcessTrackerBOMFormat {
             defaultPartNumberBorderBrush = ProductNumber.BorderBrush;
 
             try {
-                bomConfigurations = (CustomConfigBomSection)ConfigurationManager.GetSection(Properties.Resources.BOM_CONFIGURATION_SECTION);
+                bomConfigurations = (ConfigurationSectionBoms)ConfigurationManager.GetSection(Properties.Resources.BOM_CONFIGURATION_SECTION);
 
                 Console.WriteLine(bomConfigurations.OutputType);
 
-                foreach (CustomConfigBomElement bom in bomConfigurations.BomCollection) {
+                foreach (ConfigurationElementBom bom in bomConfigurations.BomCollection) {
                     Console.WriteLine("Bom Name: " + bom.Name);
                 }
             } catch(Exception e) {

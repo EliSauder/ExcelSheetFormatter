@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 
 namespace ProcessTrackerBOMFormat.Configurations {
-    public class CustomConfigBomUniqueKeyElement : ConfigurationElement {
+    public class ConfigurationElementUniqueKey : ConfigurationElement {
 
         [ConfigurationProperty("whereLook", IsRequired = true)]
         [RegexStringValidator(@"^(\w+\d+(?:(?:,\w+\d+)+)?|)$")]

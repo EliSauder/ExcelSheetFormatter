@@ -74,11 +74,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Configurations\CustomConfigBomSection.cs" />
-    <Compile Include="Configurations\CustomConfigBom.cs" />
+    <Compile Include="Configurations\CustomConfigBomElement.cs" />
     <Compile Include="Configurations\CustomConfigBomCollection.cs" />
-    <Compile Include="Configurations\CustomConfigBomColumnField.cs" />
-    <Compile Include="Configurations\CustomConfigBomColumnFieldCollection.cs" />
-    <Compile Include="Configurations\CustomConfigBomUniqueKey.cs" />
+    <Compile Include="Configurations\CustomConfigBomColumnElement.cs" />
+    <Compile Include="Configurations\CustomConfigBomColumnCollection.cs" />
+    <Compile Include="Configurations\CustomConfigBomUniqueKeyElement.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

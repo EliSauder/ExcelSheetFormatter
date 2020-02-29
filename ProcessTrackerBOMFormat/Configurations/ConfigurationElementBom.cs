@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 
 namespace ProcessTrackerBOMFormat.Configurations {
-    public class CustomConfigBomElement : ConfigurationElement {
+    public class ConfigurationElementBom : ConfigurationElement {
 
         [ConfigurationProperty("name", IsKey = true, IsRequired = true)]
         public string Name {
@@ -16,13 +16,13 @@ namespace ProcessTrackerBOMFormat.Configurations {
         }
 
         [ConfigurationProperty("uniqueKey")]
-        public CustomConfigBomUniqueKeyElement UniqueKey {
-            get { return (CustomConfigBomUniqueKeyElement)this["uniqueKey"]; }
+        public ConfigurationElementUniqueKey UniqueKey {
+            get { return (ConfigurationElementUniqueKey)this["uniqueKey"]; }
         }
 
         [ConfigurationProperty("fields", IsDefaultCollection = false)]
-        public CustomConfigBomColumnCollection BomColumnFieldCollection {
-            get { return (CustomConfigBomColumnCollection)base["fields"]; }
+        public ConfigurationCollectionColumns BomColumnFieldCollection {
+            get { return (ConfigurationCollectionColumns)base["fields"]; }
         }
 
     }
