@@ -39,32 +39,6 @@ namespace ProcessTrackerBOMFormat.Configurations {
             return -1;
         }
 
-        /*public void Add(CustomConfigBomColumnField field) {
-            BaseAdd(field);
-        }
-
-        protected override void BaseAdd(ConfigurationElement element) {
-            BaseAdd(element, false);
-        }
-
-        public void Remove(CustomConfigBomColumnField field) {
-            if (BaseIndexOf(field) >= 0) {
-                BaseRemove(field.Name);
-            }
-        }
-
-        public void RemoveAt(int index) {
-            BaseRemoveAt(index);
-        }
-
-        public void Remove(string name) {
-            BaseRemove(name);
-        }
-
-        public void Clear() {
-            BaseClear();
-        }*/
-
         protected override string ElementName {
             get { return "field"; }
         }
