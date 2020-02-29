@@ -38,7 +38,7 @@ namespace ProcessTrackerBOMFormat.Configuration {
             return -1;
         }
         protected override string ElementName {
-            get { return "populate"; }
+            get { return "population"; }
         }
     }
 }

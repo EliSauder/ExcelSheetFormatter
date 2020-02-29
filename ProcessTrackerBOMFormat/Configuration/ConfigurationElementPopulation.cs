@@ -10,16 +10,10 @@ namespace ProcessTrackerBOMFormat.Configuration {
             set { this["name"] = value; }
         }
 
-        [ConfigurationProperty("toColumn", IsRequired = true)]
-        public string ToColumn {
-            get { return (string)this["toColumn"]; }
-            set { this["toColumn"] = value; }
-        }
-
-        [ConfigurationProperty("fromColumn", IsRequired = true)]
-        public string FromColumn {
-            get { return (string)this["fromColumn"]; }
-            set { this["fromColumn"] = value; }
+        [ConfigurationProperty("checkColumn", IsRequired = true)]
+        public string CheckColumn {
+            get { return (string)this["checkColumn"]; }
+            set { this["checkColumn"] = value; }
         }
 
         [ConfigurationProperty("condition", IsRequired = false, DefaultValue = "EQUALS")]
@@ -34,10 +28,16 @@ namespace ProcessTrackerBOMFormat.Configuration {
             set { this["findValue"] = value; }
         }
 
-        [ConfigurationProperty("replaceValue", IsRequired = true)]
-        public string ReplaceValue {
-            get { return (string)this["replaceValue"]; }
-            set { this["replaceValue"] = value; }
+        [ConfigurationProperty("setValue", IsRequired = true)]
+        public string SetValue {
+            get { return (string)this["setValue"]; }
+            set { this["setValue"] = value; }
+        }
+
+        [ConfigurationProperty("toColumn", IsRequired = true)]
+        public string ToColumn {
+            get { return (string)this["toColumn"]; }
+            set { this["toColumn"] = value; }
         }
 
         [ConfigurationProperty("active", IsRequired = false, DefaultValue = true)]
