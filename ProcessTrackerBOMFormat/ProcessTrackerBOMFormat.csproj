@@ -73,7 +73,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Configuration\ConfigurationElementPopulate.cs" />
+    <Compile Include="Configuration\ConfigurationElementPopulation.cs" />
     <Compile Include="Configuration\ConfigurationCollectionPopulations.cs" />
     <Compile Include="Configuration\ConfigurationSectionBoms.cs" />
     <Compile Include="Configuration\ConfigurationElementBom.cs" />

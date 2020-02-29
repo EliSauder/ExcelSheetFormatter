@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 
 namespace ProcessTrackerBOMFormat.Configuration {
-    class ConfigurationCollectionPopulations : ConfigurationElementCollection{
+    public class ConfigurationCollectionPopulations : ConfigurationElementCollection{
         public override ConfigurationElementCollectionType CollectionType {
             get { return ConfigurationElementCollectionType.BasicMap; }
         }

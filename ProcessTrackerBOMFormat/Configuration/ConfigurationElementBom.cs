@@ -21,9 +21,13 @@ namespace ProcessTrackerBOMFormat.Configuration {
         }
 
         [ConfigurationProperty("fields", IsDefaultCollection = false)]
-        public ConfigurationCollectionColumns BomColumnFieldCollection {
+        public ConfigurationCollectionColumns ConfigurationCollectionColumns {
             get { return (ConfigurationCollectionColumns)base["fields"]; }
         }
 
+        [ConfigurationProperty("populations", IsDefaultCollection = false)]
+        public ConfigurationCollectionPopulations ConfigurationCollectionPopulations {
+            get { return (ConfigurationCollectionPopulations)base["populations"]; }
+        }
     }
 }

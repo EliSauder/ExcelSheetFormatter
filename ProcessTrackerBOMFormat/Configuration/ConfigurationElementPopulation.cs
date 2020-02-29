@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 using ProcessTrackerBOMFormat.Utility;
 
 namespace ProcessTrackerBOMFormat.Configuration {
-    class ConfigurationElementPopulation : ConfigurationElement {
+    public class ConfigurationElementPopulation : ConfigurationElement {
 
         [ConfigurationProperty("name", IsRequired = true, IsKey = true)]
         public string Name {
