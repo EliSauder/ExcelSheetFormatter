@@ -3,13 +3,14 @@
 namespace ProcessTrackerBOMFormat.Configurations {
     public class ConfigurationElementColumn : ConfigurationElement {
         public ConfigurationElementColumn() { }
-        public ConfigurationElementColumn(string name, bool enabled, string header, string output, int order, bool oRide) {
+        public ConfigurationElementColumn(string name, bool enabled, string header, string output, int order, bool oRide, bool required) {
             this.Name = name;
             this.Header = header;
             this.Enabled = enabled;
             this.Output = output;
             this.Order = order;
             this.Override = oRide;
+            this.Required = required;
         }
 
         [ConfigurationProperty("name", IsKey = true, IsRequired = true)]
@@ -47,6 +48,12 @@ namespace ProcessTrackerBOMFormat.Configurations {
         public bool Override {
             get { return (bool)this["override"]; }
             set { this["override"] = value; }
+        }
+
+        [ConfigurationProperty("required", IsRequired = false, DefaultValue = true)]
+        public bool Required {
+            get { return (bool)this["required"]; }
+            set { this["required"] = value; }
         }
     }
 }
