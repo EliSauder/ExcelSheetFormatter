@@ -61,7 +61,7 @@ namespace ProcessTrackerBOMFormat.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to applicationConfiguration\boms.
+        ///   Looks up a localized string similar to applicationConfiguration/boms.
         /// </summary>
         internal static string BOM_CONFIGURATION_SECTION {
             get {

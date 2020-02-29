@@ -27,8 +27,10 @@ namespace ProcessTrackerBOMFormat {
 
             try {
                 bomConfigurations = (CustomConfigBomSection)ConfigurationManager.GetSection(Properties.Resources.BOM_CONFIGURATION_SECTION);
-                
-                foreach (CustomConfigBom bom in bomConfigurations.BomCollection) {
+
+                Console.WriteLine(bomConfigurations.OutputType);
+
+                foreach (CustomConfigBomElement bom in bomConfigurations.BomCollection) {
                     Console.WriteLine("Bom Name: " + bom.Name);
                 }
             } catch(Exception e) {

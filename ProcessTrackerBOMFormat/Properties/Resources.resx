@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BOM_CONFIGURATION_SECTION" xml:space="preserve">
-    <value>applicationConfiguration\boms</value>
+    <value>applicationConfiguration/boms</value>
   </data>
 </root>
