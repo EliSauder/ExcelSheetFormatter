@@ -4,9 +4,9 @@ namespace ProcessTrackerBOMFormat.Configuration {
     /// <summary>
     /// Class <c>ConfigurationCollectionBoms</c> defines a 
     /// custom configuration element collection for App.config 
-    /// that defines a collection of BOM elements.
+    /// that defines a collection of BOMs.
     /// </summary>
-    /// <see cref="ConfigurationElementBom"/>
+    /// <see cref="ConfigurationElementCollection"/>
     public class ConfigurationCollectionBoms : ConfigurationElementCollection {
 
         /// <summary>
