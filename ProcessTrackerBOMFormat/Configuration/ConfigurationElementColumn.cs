@@ -11,12 +11,19 @@ namespace ProcessTrackerBOMFormat.Configuration {
     public class ConfigurationElementColumn : ConfigurationElement {
 
         /// <value>Property <c>Name</c> defines the name of the column and is the key for the collection</value>
+        /// <remarks>
+        /// <para>It is a key.</para>
+        /// <para>It is required.</para>
+        /// </remarks>
         [ConfigurationProperty("name", IsKey = true, IsRequired = true)]
         public string Name {
             get {return (string)this["name"];}
             set {this["name"] = value;}
         }
         /// <value>Property <c>Header</c> is the header inside of the input file that the program will look for.</value>
+        /// <remarks>
+        /// <para>It is required.</para>
+        /// </remarks>
         [ConfigurationProperty("header", IsRequired = true)]
         public string Header {
             get {return (string)this["header"];}
@@ -24,7 +31,9 @@ namespace ProcessTrackerBOMFormat.Configuration {
         }
 
         /// <value>Property <c>Output</c> is the name of the column that the output file will contain instead of the one in the input file.</value>
-        /// <remarks>If it is not provided, the program will use the input file column name.</remarks>
+        /// <remarks>
+        /// <para>If it is not provided, the program will use the input file column name.</para>
+        /// </remarks>
         [ConfigurationProperty("output", IsRequired = false, DefaultValue = "")]
         public string Output {
             get { return (string)this["output"]; }
@@ -45,6 +54,9 @@ namespace ProcessTrackerBOMFormat.Configuration {
         }
 
         /// <value>Property <c>Enabled</c> defines whether the program will actually check for/use this column.</value>
+        /// <remarks>
+        /// <para>Default value: false</para>
+        /// </remarks>
         [ConfigurationProperty("enabled", IsRequired = false, DefaultValue = false)]
         public bool Enabled {
             get { return (bool)this["enabled"]; }
@@ -52,6 +64,9 @@ namespace ProcessTrackerBOMFormat.Configuration {
         }
 
         /// <value>Property <c>Override</c> whether this column will override any other column with the same <c>Order</c></value>
+        /// <remarks>
+        /// <para>Default value: false</para>
+        /// </remarks>
         [ConfigurationProperty("override", IsRequired = false, DefaultValue = false)]
         public bool Override {
             get { return (bool)this["override"]; }
@@ -59,6 +74,9 @@ namespace ProcessTrackerBOMFormat.Configuration {
         }
 
         /// <value>Property <c>Required</c> indicates whether the column is required in the input file or not.</value>
+        /// <remarks>
+        /// <para>Default value: true</para>
+        /// </remarks>
         [ConfigurationProperty("required", IsRequired = false, DefaultValue = true)]
         public bool Required {
             get { return (bool)this["required"]; }
