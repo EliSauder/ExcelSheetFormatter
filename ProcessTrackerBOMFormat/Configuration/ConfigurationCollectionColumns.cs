@@ -18,8 +18,8 @@ namespace ProcessTrackerBOMFormat.Configuration {
         /// <summary>
         /// Creates a new ConfigurationElement to add to the collection.
         /// </summary>
-        /// <remarks>It will create the element as a <c>ConfigurationElementBom</c></remarks>
-        /// <returns>A new configuration element of type ConfigurationElementBom</returns>
+        /// <remarks>It will create the element as a <c>ConfigurationElementColumn</c></remarks>
+        /// <returns>A new configuration element of type ConfigurationElementColumn</returns>
         protected override ConfigurationElement CreateNewElement() {
             return new ConfigurationElementColumn();
         }

@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 
 namespace ProcessTrackerBOMFormat.Configuration {
+
     /// <summary>
     /// Class <c>ConfigurationCollectionBoms</c> defines a 
     /// custom configuration element collection for App.config 
