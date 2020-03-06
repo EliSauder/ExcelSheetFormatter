@@ -4,9 +4,133 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProcessTrackerBOMFormat"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Process Tracker BOM Format" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-    <Grid>
-        
+        MinHeight="450"
+        MinWidth="455"
+        Height="800" 
+        Width="1200" 
+        ResizeMode="CanResize" 
+        WindowStartupLocation="CenterOwner" 
+        WindowStyle="SingleBorderWindow" 
+        Icon="./Resources/favicon.ico"
+        AllowsTransparency="False" 
+        MouseDown="Window_MouseDown">
+
+    <Window.Resources>
+        <GridLength x:Key="borderWidth">20</GridLength>
+        <GridLength x:Key="footerWidth">70</GridLength>
+        <GridLength x:Key="statusBarWidth">25</GridLength>
+        <!--<sys:String x:Key="borderWidth">20</sys:String>-->
+    </Window.Resources>
+
+    <Grid x:Name="MainGrid" Background="#f8f8f8">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="WindowColumn" Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition x:Name="MainFormRow" Height="*" />
+            <RowDefinition x:Name="FooterRow" Height="{StaticResource footerWidth}" />
+            <RowDefinition x:Name="StatusBarRow" Height="{StaticResource statusBarWidth}"/>
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="PaddingAndSplitGrid" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{StaticResource borderWidth}"  />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="{StaticResource borderWidth}" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="{StaticResource borderWidth}" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="{StaticResource borderWidth}" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="{StaticResource borderWidth}" />
+            </Grid.RowDefinitions>
+
+            <Border x:Name="FormBorder" Grid.Row="1" Grid.Column="1" Background="#FFF" CornerRadius="5" Focusable="True">
+                <Border.Effect>
+                    <DropShadowEffect 
+                        ShadowDepth="0" 
+                        Direction="0" 
+                        Color="Gray" 
+                        Opacity="0.6" 
+                        BlurRadius="5"/>
+                </Border.Effect>
+                <Grid Width="400">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Margin="50 10">
+                        <Label 
+                            Foreground="Black" 
+                            HorizontalAlignment="Center" 
+                            Margin="0 0 0 5" 
+                            FontSize="25">
+
+                            Enter Product Number
+                        </Label>
+                        <TextBox 
+                            VerticalContentAlignment="Center" 
+                            TextAlignment="Center" 
+                            x:Name="ProductNumber"
+                            CharacterCasing="Upper"
+                            Width="auto" 
+                            Height="50" 
+                            FontSize="30" 
+                            Background="#EEE" 
+                            BorderBrush="#333" 
+                            BorderThickness="2"
+                            
+                            LostFocus="ProductNumber_LostFocus">
+                            <TextBox.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="3"/>
+                                </Style>
+                            </TextBox.Resources>
+                        </TextBox>
+                    </StackPanel>
+
+                    <Button Margin="10" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            Grid.Row="1" 
+                            Width="100" 
+                            Height="50"
+                            Background="#1584cd"
+                            Foreground="#f8f8f8"
+                            FontSize="20" 
+                            TextBlock.TextAlignment="Center">
+                        Process
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="3"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Border Grid.Row="1" CornerRadius="0 0 0 0" Background="#003871">
+            <Border.Effect>
+                <DropShadowEffect 
+                        ShadowDepth="0" 
+                        Direction="0" 
+                        Color="Black" 
+                        Opacity="0.7" 
+                        BlurRadius="5"/>
+            </Border.Effect>
+            <Rectangle x:Name="Footer" Opacity="0"></Rectangle>
+        </Border>
+        <StatusBar Name="StatusBar" Grid.Row="2" Background="#f8f8f8" ></StatusBar>
     </Grid>
 </Window>
