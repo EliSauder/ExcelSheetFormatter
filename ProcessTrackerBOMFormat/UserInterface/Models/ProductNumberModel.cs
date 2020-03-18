@@ -12,11 +12,6 @@ namespace ProcessTrackerBOMFormat.UserInterface.Models {
         public const string PRODUCT_NUMBER_REGEX = @"^((?:G|T|K)\d{5}(?:(?=-)-\d{1,3}(?:(?=[A-Z])[A-Z]\d|)|)|(?:V)?\d{6,7}Z)$";
 
         private string _productNumber = "";
-        private Regex _regex = null;
-
-        public ProductNumberModel() {
-            this._regex = new Regex(PRODUCT_NUMBER_REGEX);
-        }
 
         [Required]
         [RegularExpression(PRODUCT_NUMBER_REGEX, 
@@ -26,8 +21,9 @@ namespace ProcessTrackerBOMFormat.UserInterface.Models {
             set { this._productNumber = value; }
         }
         
-        public bool validateProductNumber(string productNumber) {
-            return this._regex.IsMatch(productNumber);
+        public static bool validateProductNumber(string productNumber) {
+            Regex prodReg = new Regex(PRODUCT_NUMBER_REGEX);
+            return prodReg.IsMatch(productNumber);
         }
 
     }

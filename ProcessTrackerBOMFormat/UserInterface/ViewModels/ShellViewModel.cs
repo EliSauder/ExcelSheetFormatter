@@ -10,7 +10,7 @@ namespace ProcessTrackerBOMFormat.UserInterface.ViewModels {
     public class ShellViewModel : Conductor<object>.Collection.OneActive {
 
         public ShellViewModel() {
-            ActivateItem(new BomFormatViewModel());
+            ActivateItem(new BomFormatFormViewModel());
         }
 
     }
