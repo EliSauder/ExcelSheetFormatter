@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ProcessTrackerBOMFormat.UserInterface.ViewModels {
-    public class BomFormatFormViewModel : Screen, IBomFormatChild {
+    public class BomFormatFormViewModel : Screen {
+        
     }
 }
