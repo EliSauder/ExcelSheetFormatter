@@ -48,14 +48,5 @@ namespace ProcessTrackerBOMFormat.Configuration {
         public ConfigurationCollectionColumns ColumnCollection {
             get { return (ConfigurationCollectionColumns)base["fields"]; }
         }
-
-        /// <value>
-        /// <para>Property <c>PopulationCollection</c> is a collection of population definitions that the program will execute.</para>
-        /// <para>Each population set one columns value to the value provided as long as a condition is true.</para>
-        /// </value>
-        [ConfigurationProperty("populations", IsDefaultCollection = false)]
-        public ConfigurationCollectionPopulations PopulationCollection {
-            get { return (ConfigurationCollectionPopulations)base["populations"]; }
-        }
     }
 }

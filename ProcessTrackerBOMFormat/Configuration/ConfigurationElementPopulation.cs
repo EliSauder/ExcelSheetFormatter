@@ -22,16 +22,6 @@ namespace ProcessTrackerBOMFormat.Configuration {
             set { this["name"] = value; }
         }
 
-        /// <value>Property <c>CheckColumn</c> is the name of hte column that the program will be looking for the value in.</value>
-        /// <remarks>
-        /// <para>It is required.</para>
-        /// </remarks>
-        [ConfigurationProperty("checkColumn", IsRequired = true)]
-        public string CheckColumn {
-            get { return (string)this["checkColumn"]; }
-            set { this["checkColumn"] = value; }
-        }
-
         /// <value>Property <c>Condition</c> is the condition that will be performed on the column values.</value>
         /// <remarks>
         /// <para>Default value: EQUALS</para>
@@ -70,7 +60,7 @@ namespace ProcessTrackerBOMFormat.Configuration {
         /// <remarks>
         /// <para>It is required.</para>
         /// </remarks>
-        [ConfigurationProperty("toColumn", IsRequired = true)]
+        [ConfigurationProperty("toColumn", DefaultValue = "")]
         public string ToColumn {
             get { return (string)this["toColumn"]; }
             set { this["toColumn"] = value; }
