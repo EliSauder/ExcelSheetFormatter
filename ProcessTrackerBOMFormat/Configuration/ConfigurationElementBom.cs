@@ -19,7 +19,20 @@ namespace ProcessTrackerBOMFormat.Configuration {
         [ConfigurationProperty("name", IsKey = true, IsRequired = true)]
         public string Name {
             get { return (string)this["name"]; } 
-            set { this["name"] = value; } 
+            set {
+                if (string.IsNullOrEmpty(DisplayName)) DisplayName = value;
+                this["name"] = value; 
+            } 
+        }
+
+        /// <value>
+        /// Property <c>Name</c> defines the name of the bom. 
+        /// It is also the key for the bom collection
+        /// </value>
+        [ConfigurationProperty("displayName", IsKey = true, DefaultValue = "")]
+        public string DisplayName {
+            get { return (string)this["displayName"]; }
+            set { this["displayName"] = value; }
         }
 
         /// <value>

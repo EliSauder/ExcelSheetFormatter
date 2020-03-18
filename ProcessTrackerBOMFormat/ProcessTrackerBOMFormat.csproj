@@ -85,6 +85,7 @@
     <Compile Include="UserInterface\Interfaces\IBomFormat.cs" />
     <Compile Include="UserInterface\Interfaces\IBomFormatChild.cs" />
     <Compile Include="UserInterface\Models\BomExcelModel.cs" />
+    <Compile Include="UserInterface\Models\BomSelectionModel.cs" />
     <Compile Include="UserInterface\Models\ProductNumberModel.cs" />
     <Compile Include="UserInterface\ViewModels\BomFormatDataDisplayViewModel.cs" />
     <Compile Include="UserInterface\ViewModels\BomFormatFormViewModel.cs" />
