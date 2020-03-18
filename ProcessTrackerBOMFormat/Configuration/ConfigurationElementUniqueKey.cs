@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 
 namespace ProcessTrackerBOMFormat.Configuration {
 
@@ -7,6 +8,7 @@ namespace ProcessTrackerBOMFormat.Configuration {
     /// <para>This is where the program will look in the input file to determin if the file provided is of a paticular type.</para>
     /// </summary>
     /// <see cref="ConfigurationElement"/>
+    [Obsolete("Not used in preference for a form user selection.")]
     public class ConfigurationElementUniqueKey : ConfigurationElement {
 
         /// <value>Property <c>WhereLook</c> tells the program where to look for the value.</value>
@@ -15,7 +17,7 @@ namespace ProcessTrackerBOMFormat.Configuration {
         /// <para>Any value must match this regex: @"^(\w+\d+(?:(?:,\w+\d+)+)?|)$"</para>
         /// </remarks>
         [ConfigurationProperty("whereLook", IsRequired = true)]
-        [RegexStringValidator(@"^(\w+\d+(?:(?:,\w+\d+)+)?|)$")]
+        [RegexStringValidator(@"^[A-Z]+\d+(?:,[A-Z]+\d+)*$")]
         public string WhereLook { 
             get { return (string)this["whereLook"]; } 
             set { this["whereLook"] = value; } 

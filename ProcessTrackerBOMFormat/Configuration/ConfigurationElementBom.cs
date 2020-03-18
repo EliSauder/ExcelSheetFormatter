@@ -32,15 +32,6 @@ namespace ProcessTrackerBOMFormat.Configuration {
         }
 
         /// <value>
-        /// Property <c>UniqueKey</c> defines where in the excel file the program will 
-        /// look to find the value specified indicating that the file input is of the current bom type configured.
-        /// </value>
-        [ConfigurationProperty("uniqueKey")]
-        public ConfigurationElementUniqueKey UniqueKey {
-            get { return (ConfigurationElementUniqueKey)this["uniqueKey"]; }
-        }
-
-        /// <value>
         /// <para>Property <c>ColumnCollection</c> is a collection of columns that the program will look for.</para>
         /// <para>Each column will contain the information needed for the program to perform the defined actions</para>
         /// </value>
