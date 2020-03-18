@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using ProcessTrackerBOMFormat.Utility;
+using System.Configuration;
 
 namespace ProcessTrackerBOMFormat.Configuration {
 
@@ -27,10 +28,9 @@ namespace ProcessTrackerBOMFormat.Configuration {
         /// <para>Must matche the regex: "^individual|compact$"</para>
         /// </remarks>
         //TODO: Convert OutputType to an enum output. 
-        [ConfigurationProperty("outputType", DefaultValue = "individual", IsRequired = true)]
-        [RegexStringValidator("^individual|compact$")]
-        public string OutputType {
-            get { return (string)base["outputType"]; }
+        [ConfigurationProperty("outputType", DefaultValue = "INDIVIDUAL", IsRequired = true)]
+        public BomOutputType OutputType {
+            get { return (BomOutputType)base["outputType"]; }
             set { base["outputType"] = value; }
         }
 

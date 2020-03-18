@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="ProcessTrackerBOMFormat.UserInterface.Views.BomFormatFormView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ProcessTrackerBOMFormat.UserInterface.Views"
+             mc:Ignorable="d" Height="auto" Width="auto">
+    <Border x:Name="FormBorder" Background="#FFF" CornerRadius="5" Focusable="True">
+        <Border.Effect>
+            <DropShadowEffect 
+                        ShadowDepth="0" 
+                        Direction="0" 
+                        Color="Gray" 
+                        Opacity="0.6" 
+                        BlurRadius="5"/>
+        </Border.Effect>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="50 10">
+                <Label 
+                            Foreground="Black" 
+                            HorizontalAlignment="Center" 
+                            Margin="0 0 0 5" 
+                            FontSize="25">
+                    Enter Product Number
+                </Label>
+                <TextBox 
+                            VerticalContentAlignment="Center" 
+                            TextAlignment="Center" 
+                            x:Name="ProductNumber"
+                            CharacterCasing="Upper"
+                            Width="auto" 
+                            Height="50" 
+                            FontSize="30" 
+                            Background="#EEE" 
+                            BorderBrush="#333" 
+                            BorderThickness="2">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="3"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+            </StackPanel>
+
+            <Button Margin="10" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            Grid.Row="1" 
+                            Width="100" 
+                            Height="50"
+                            Background="#1584cd"
+                            Foreground="#f8f8f8"
+                            FontSize="20" 
+                            TextBlock.TextAlignment="Center">
+                Process
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="3"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+        </Grid>
+    </Border>
+</UserControl>
