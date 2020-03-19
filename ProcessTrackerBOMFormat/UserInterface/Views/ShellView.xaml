@@ -6,11 +6,12 @@
         xmlns:local="clr-namespace:ProcessTrackerBOMFormat.UserInterface.Views"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="ShellView" Height="600" Width="800"
+        MinHeight="500" MinWidth="450"
+        Title="ShellView" Height="500" Width="450"
         FontSize="15">
 
     <Window.Resources>
-        <sys:Double x:Key="mainWindowMargin">10</sys:Double>
+        <sys:Double x:Key="mainWindowMargin">20</sys:Double>
         <Thickness x:Key="borderMargin" 
                    Left="{StaticResource mainWindowMargin}" 
                    Top="{StaticResource mainWindowMargin}" 

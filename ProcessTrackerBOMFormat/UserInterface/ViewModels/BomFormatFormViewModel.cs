@@ -12,18 +12,9 @@ namespace ProcessTrackerBOMFormat.UserInterface.ViewModels {
 
         private BomSelectionModel _bomSelectionModel = new BomSelectionModel();
         private ProductNumberModel _productNumber = new ProductNumberModel();
-        public bool _bomIsSelected = false;
 
-        public bool BomIsSelected {
-            get { return _bomIsSelected; }
-            set {
-                _bomIsSelected = value;
-                NotifyOfPropertyChange(() => BomIsSelected);
-            }
-        }
-
-        public void bomSelectedIsValid() {
-            BomIsSelected = !string.IsNullOrWhiteSpace(SelectedItem.Key);
+        public BomFormatFormViewModel() {
+            _bomSelectionModel.SelectedItem = _bomSelectionModel[0];
         }
 
         public string ProductNumber {
@@ -43,25 +34,14 @@ namespace ProcessTrackerBOMFormat.UserInterface.ViewModels {
         }
 
         public KeyValuePair<string, string> SelectedItem {
-            get { return _bomSelectionModel.SelectedValue; }
+            get { return _bomSelectionModel.SelectedItem; }
             set { 
-                _bomSelectionModel.SelectedValue = value;
-                SelectedKey = value.Key;
+                _bomSelectionModel.SelectedItem = value;
                 NotifyOfPropertyChange(() => SelectedItem);
             }
         }
 
-        private string SelectedKey {
-            get { return _bomSelectionModel.SelectedValue.Key; }
-            set { NotifyOfPropertyChange(() => SelectedKey); }
-        }
-
-        public bool CanProcess(string productNumber, string selectedKey) {
-            MessageBox.Show("Calling CanProcess();");
-            return _productNumber.validateProductNumber() && !string.IsNullOrWhiteSpace(selectedKey);
-        }
-
-        public void Process(string productNumber, string selectedKey) {
+        public void Process(string productNumber) {
 
         }
 

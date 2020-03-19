@@ -22,8 +22,8 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="50 10">
@@ -53,16 +53,26 @@
                 </TextBox>
             </StackPanel>
 
-            <Label Grid.Row="1" Grid.Column="0">Select BOM Source</Label>
+            <!--<Label Grid.Row="1" Grid.Column="0">Select BOM Source</Label>-->
 
             <DataGrid x:Name="Boms" 
                       AutoGenerateColumns="False" 
                       Margin="10 0 10 0" 
                       Grid.Row="1" 
-                      Grid.Column="1" 
+                      Grid.Column="0" 
+                      Grid.ColumnSpan="2"
                       IsReadOnly="True"
                       SelectionMode="Single"
-                      SelectedItem="{Binding Path=SelectedItem, Mode=OneWayToSource}">
+                      SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
+                      BorderBrush="Transparent" FontSize="16">
+                <DataGrid.Effect>
+                    <DropShadowEffect 
+                        ShadowDepth="0" 
+                        Direction="0" 
+                        Color="Gray" 
+                        Opacity="0.6" 
+                        BlurRadius="0"/>
+                </DataGrid.Effect>
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Key}" Header="Key" Visibility="Hidden"/>
                     <DataGridTextColumn Binding="{Binding Value}" Header="Bom Source" Width="*"/>
