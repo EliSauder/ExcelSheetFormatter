@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ProcessTrackerBOMFormat.UserInterface.Views"
-             mc:Ignorable="d" Height="auto" Width="auto">
+             mc:Ignorable="d" Height="auto" Width="auto" d:DesignWidth="420" d:DesignHeight="300">
     <Border x:Name="FormBorder" Background="#FFF" CornerRadius="5" Focusable="True">
         <Border.Effect>
             <DropShadowEffect 
@@ -16,15 +16,17 @@
         </Border.Effect>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Margin="50 10">
+            <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="50 10">
                 <Label 
                             Foreground="Black" 
                             HorizontalAlignment="Center" 
@@ -51,16 +53,35 @@
                 </TextBox>
             </StackPanel>
 
-            <Button Margin="10" 
-                            HorizontalAlignment="Right" 
-                            VerticalAlignment="Bottom" 
-                            Grid.Row="1" 
-                            Width="100" 
-                            Height="50"
-                            Background="#1584cd"
-                            Foreground="#f8f8f8"
-                            FontSize="20" 
-                            TextBlock.TextAlignment="Center">
+            <Label Grid.Row="1" Grid.Column="0">Select BOM Source</Label>
+
+            <DataGrid x:Name="Boms" 
+                      AutoGenerateColumns="False" 
+                      Margin="10 0 10 0" 
+                      Grid.Row="1" 
+                      Grid.Column="1" 
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      SelectedItem="{Binding Path=SelectedItem, Mode=OneWayToSource}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Key}" Header="Key" Visibility="Hidden"/>
+                    <DataGridTextColumn Binding="{Binding Value}" Header="Bom Source" Width="*"/>
+                </DataGrid.Columns>
+                
+            </DataGrid>
+
+            <Button x:Name="Process"
+                    Margin="10" 
+                    HorizontalAlignment="Right" 
+                    VerticalAlignment="Bottom" 
+                    Grid.Row="2" 
+                    Grid.Column="1"
+                    Width="100" 
+                    Height="50"
+                    Background="#1584cd"
+                    Foreground="#f8f8f8"
+                    FontSize="20" 
+                    TextBlock.TextAlignment="Center">
                 Process
                 <Button.Resources>
                     <Style TargetType="{x:Type Border}">

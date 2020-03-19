@@ -20,11 +20,15 @@ namespace ProcessTrackerBOMFormat.UserInterface.Models {
             get { return this._productNumber; }
             set { this._productNumber = value; }
         }
-        
+
+        public bool validateProductNumber() {
+            Regex prodReg = new Regex(PRODUCT_NUMBER_REGEX);
+            return prodReg.IsMatch(_productNumber);
+        }
+
         public static bool validateProductNumber(string productNumber) {
             Regex prodReg = new Regex(PRODUCT_NUMBER_REGEX);
             return prodReg.IsMatch(productNumber);
         }
-
     }
 }

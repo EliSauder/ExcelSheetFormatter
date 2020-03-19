@@ -1,4 +1,5 @@
-﻿using ProcessTrackerBOMFormat.Configuration;
+﻿using Caliburn.Micro;
+using ProcessTrackerBOMFormat.Configuration;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,13 +11,12 @@ using System.Threading.Tasks;
 namespace ProcessTrackerBOMFormat.UserInterface.Models {
     public class BomSelectionModel {
 
-        private readonly Dictionary<string, string> _boms = null;
+        private readonly Dictionary<string, string> _boms = new Dictionary<string, string>();
         private KeyValuePair<string, string> _selectedBom = new KeyValuePair<string, string>(null, null);
-
         public int NumberBoms { get; } = 0;
 
         public BomSelectionModel() {
-            ConfigurationSectionBoms configuration = (ConfigurationSectionBoms)ConfigurationManager.GetSection(Properties.Resources.BOM_CONFIGURATION_SECTION)
+            ConfigurationSectionBoms configuration = (ConfigurationSectionBoms)ConfigurationManager.GetSection(Properties.Resources.BOM_CONFIGURATION_SECTION);
 
             foreach (ConfigurationElementBom bom in configuration.BomCollection) {
                 _boms.Add(bom.Name, bom.DisplayName);
