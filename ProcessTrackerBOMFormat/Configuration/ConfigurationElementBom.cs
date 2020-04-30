@@ -1,6 +1,7 @@
-﻿using System.Configuration;
+﻿using Formatter.Utility;
+using System.Configuration;
 
-namespace ProcessTrackerBOMFormat.Configuration {
+namespace Formatter.Configuration {
 
     /// <summary>
     /// <para>Class <c>ConfigurationElementBom</c> defines a bom configuration element.</para>  
@@ -25,6 +26,18 @@ namespace ProcessTrackerBOMFormat.Configuration {
             } 
         }
 
+        /// <value>Proeprty <c>OutputType</c> is the type of output the program will use in the output file.</value>
+        /// <remarks>
+        /// <para>It is required.</para>
+        /// <para>Default value: INDIVIDUAL</para>
+        /// </remarks>
+        //TODO: Convert OutputType to an enum output. 
+        [ConfigurationProperty("outputType", DefaultValue = "INDIVIDUAL", IsRequired = true)]
+        public BomOutputType OutputType {
+            get { return (BomOutputType)base["outputType"]; }
+            set { base["outputType"] = value; }
+        }
+
         /// <value>
         /// Property <c>Name</c> defines the name of the bom. 
         /// It is also the key for the bom collection
@@ -35,13 +48,26 @@ namespace ProcessTrackerBOMFormat.Configuration {
             set { this["displayName"] = value; }
         }
 
+        [ConfigurationProperty("outputSheetName", DefaultValue = "")]
+        public string OutputSheetName {
+            get { return (string)this["outputSheetName"]; }
+            set { this["outputSheetName"] = value; }
+        }
+
+        [ConfigurationProperty("inputFileExtention", IsRequired = true, DefaultValue = ".xlsx")]
+        [RegexStringValidator(@"\.xlsx|\.csv|\.xls")]
+        public string InputFileExtention {
+            get { return (string)this["inputFileExtention"]; }
+            set { this["inputFileExtention"] = value; }
+        }
+
         /// <value>
         /// Property <c>Enabled</c> defines wether or not the bom in configuration will be checked/used or not.
         /// </value>
         [ConfigurationProperty("enabled", DefaultValue = true, IsRequired = false)]
-        public bool Enabled { 
+        public bool Enabled {
             get { return (bool)this["enabled"]; }
-            set { this["enabled"] = value; } 
+            set { this["enabled"] = value; }
         }
 
         /// <value>

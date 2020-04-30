@@ -5,9 +5,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ProcessTrackerBOMFormat.Configuration;
+using Formatter.Configuration;
 
-namespace ProcessTrackerBOMFormat {
+namespace Formatter {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>

@@ -1,4 +1,7 @@
-﻿namespace ProcessTrackerBOMFormat.Utility {
+﻿using System;
+using System.Text.RegularExpressions;
+
+namespace Formatter.Utility {
     /// <summary>
     /// Class <c>StringEvaluation</c> is resposible for evaluating string comparisions.
     /// </summary>
@@ -23,7 +26,13 @@
             /// <summary>
             /// One string contains another.
             /// </summary>
-            CONTAINS
+            CONTAINS,
+            ANY,
+            MATCHES,
+            ISNUMBER,
+            ISINT,
+            ISFLOAT,
+            ISEMPTY
         }
 
         /// <summary>
@@ -35,6 +44,8 @@
         /// <returns>True if the condition is met with the two strings and False if the condition is not met.</returns>
         public static bool eval(StringEvalCondition condition, string input, string lookFor) {
             switch (condition) {
+                case StringEvalCondition.ISEMPTY:
+                    return input.Length == 0;
                 case StringEvalCondition.BEGINS_WITH:
                     return input.StartsWith(lookFor);
                 case StringEvalCondition.ENDS_WITH:
@@ -43,6 +54,29 @@
                     return input.Equals(lookFor);
                 case StringEvalCondition.CONTAINS:
                     return input.Contains(lookFor);
+                case StringEvalCondition.MATCHES:
+                    try {
+                        bool value = (new Regex(lookFor)).IsMatch(input);
+                        return value;
+                    } catch(Exception e) {
+                        throw new Exception("Issue encountered when using regex for match of " + input + ", check config.\n" + "Original Error: " + e.Message);
+                    } 
+                case StringEvalCondition.ANY:
+                    return true;
+                default:
+                    return eval(condition, input);
+            }
+        }
+
+        public static bool eval(StringEvalCondition condition, string input) {
+            switch (condition) {
+                case StringEvalCondition.ISNUMBER:
+                    return double.TryParse(input, out _);
+                case StringEvalCondition.ISINT:
+                    return int.TryParse(input, out _);
+                case StringEvalCondition.ISFLOAT:
+                    double.TryParse(input, out double outValue);
+                    return outValue != (int)outValue;
                 default:
                     return false;
             }

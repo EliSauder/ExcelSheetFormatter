@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ProcessTrackerBOMFormat.Properties {
+namespace Formatter.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ProcessTrackerBOMFormat.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ProcessTrackerBOMFormat.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Formatter.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -66,6 +66,33 @@ namespace ProcessTrackerBOMFormat.Properties {
         internal static string BOM_CONFIGURATION_SECTION {
             get {
                 return ResourceManager.GetString("BOM_CONFIGURATION_SECTION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Microsoft.Jet.OLEDB.4.0.
+        /// </summary>
+        internal static string EXCEL_OLDB_DATA_PROVIDER {
+            get {
+                return ResourceManager.GetString("EXCEL_OLDB_DATA_PROVIDER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to applicationConfiguration/directories.
+        /// </summary>
+        internal static string FILE_CONFIGURATION_SECTION {
+            get {
+                return ResourceManager.GetString("FILE_CONFIGURATION_SECTION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .xlsx.
+        /// </summary>
+        internal static string OUTPUTFILE_EXTENTION {
+            get {
+                return ResourceManager.GetString("OUTPUTFILE_EXTENTION", resourceCulture);
             }
         }
     }

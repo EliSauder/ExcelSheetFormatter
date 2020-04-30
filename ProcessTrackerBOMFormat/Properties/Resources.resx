@@ -120,4 +120,13 @@
   <data name="BOM_CONFIGURATION_SECTION" xml:space="preserve">
     <value>applicationConfiguration/boms</value>
   </data>
+  <data name="EXCEL_OLDB_DATA_PROVIDER" xml:space="preserve">
+    <value>Microsoft.Jet.OLEDB.4.0</value>
+  </data>
+  <data name="FILE_CONFIGURATION_SECTION" xml:space="preserve">
+    <value>applicationConfiguration/directories</value>
+  </data>
+  <data name="OUTPUTFILE_EXTENTION" xml:space="preserve">
+    <value>.xlsx</value>
+  </data>
 </root>

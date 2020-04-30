@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Configuration;
 
-namespace ProcessTrackerBOMFormat.Configuration {
+namespace Formatter.Configuration {
 
     /// <summary>
     /// <para>Class <c>ConfigurationElementUniqueKey</c> defines a bom find location/value.</para>  

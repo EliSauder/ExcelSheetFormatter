@@ -1,14 +1,9 @@
-﻿using Caliburn.Micro;
-using ProcessTrackerBOMFormat.Configuration;
+﻿using Formatter.Configuration;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ProcessTrackerBOMFormat.UserInterface.Models {
+namespace Formatter.UserInterface.Models {
     public class BomSelectionModel {
 
         private readonly Dictionary<string, string> _boms = new Dictionary<string, string>();
@@ -20,9 +15,11 @@ namespace ProcessTrackerBOMFormat.UserInterface.Models {
             ConfigurationSectionBoms configuration = (ConfigurationSectionBoms)ConfigurationManager.GetSection(Properties.Resources.BOM_CONFIGURATION_SECTION);
 
             foreach (ConfigurationElementBom bom in configuration.BomCollection) {
-                _boms.Add(bom.Name, bom.DisplayName);
-                _bomKeyList.Add(bom.Name);
-                NumberBoms++;
+                if (bom.Enabled) {
+                    _boms.Add(bom.Name, bom.DisplayName);
+                    _bomKeyList.Add(bom.Name);
+                    NumberBoms++;
+                }
             }
         }
 
@@ -46,6 +43,10 @@ namespace ProcessTrackerBOMFormat.UserInterface.Models {
         public void select(int number) {
             if (!_boms.ContainsKey(_bomKeyList[number])) throw new ArgumentException("Value pair provided is not found in the list of BOMs.");
             _selectedBom = new KeyValuePair<string, string>(_bomKeyList[number], _boms[_bomKeyList[number]]);
+        }
+
+        public bool HasSelectedItem() {
+            return _selectedBom.Key != null;
         }
 
         public KeyValuePair<string, string> SelectedItem {

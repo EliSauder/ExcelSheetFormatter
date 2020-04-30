@@ -1,21 +1,18 @@
 ﻿using Caliburn.Micro;
-using ProcessTrackerBOMFormat.UserInterface.Models;
+using Formatter.Configuration;
+using Formatter.Processing;
+using Formatter.UserInterface.Models;
+using Formatter.Utility;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
 using System.Windows;
 
-namespace ProcessTrackerBOMFormat.UserInterface.ViewModels {
+namespace Formatter.UserInterface.ViewModels {
     public class BomFormatFormViewModel : Screen, IBomFormatChild{
 
         private BomSelectionModel _bomSelectionModel = new BomSelectionModel();
         private ProductNumberModel _productNumber = new ProductNumberModel();
-
-        public BomFormatFormViewModel() {
-            _bomSelectionModel.SelectedItem = _bomSelectionModel[0];
-        }
 
         public string ProductNumber {
             get { return _productNumber.ProductNumber; }
@@ -41,8 +38,33 @@ namespace ProcessTrackerBOMFormat.UserInterface.ViewModels {
             }
         }
 
-        public void Process(string productNumber) {
+        public void Process() {
+            if(!_productNumber.validateProductNumber()) {
+                MessageBox.Show("Invalid Product number.", "Invalid Entry", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            } else if (!_bomSelectionModel.HasSelectedItem()) {
+                MessageBox.Show("No BOM is selected.", "Invalid Entry", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
+            try {
+                ConfigurationSectionFiles fileConfig = (ConfigurationSectionFiles)ConfigurationManager.GetSection(Properties.Resources.FILE_CONFIGURATION_SECTION);
+                ConfigurationSectionBoms bomConfigs = (ConfigurationSectionBoms)ConfigurationManager.GetSection(Properties.Resources.BOM_CONFIGURATION_SECTION);
+                ConfigurationElementBom bomConfig = bomConfigs.BomCollection[_bomSelectionModel.SelectedItem.Key];
+
+                BomFormat bomFormat = new BomFormat(
+                    _productNumber,
+                   fileConfig,
+                   bomConfig,
+                   bomConfig.OutputType);
+
+                bomFormat.FormatBom();
+
+                ProductNumber = "";
+
+            } catch (Exception e) {
+                MessageBox.Show("Error:\n\n" + ErrorFormating.FormatException(e), "Error Occured", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
     }

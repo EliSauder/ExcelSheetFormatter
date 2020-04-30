@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ProcessTrackerBOMFormat.UserInterface.Views {
+namespace Formatter.UserInterface.Views {
     /// <summary>
     /// Interaction logic for BomFormatDataDisplayView.xaml
     /// </summary>

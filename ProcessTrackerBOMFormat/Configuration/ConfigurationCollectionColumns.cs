@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace ProcessTrackerBOMFormat.Configuration {
+namespace Formatter.Configuration {
 
     /// <summary>
     /// Class <c>ConfigurationCollectionColumns</c> defines a 

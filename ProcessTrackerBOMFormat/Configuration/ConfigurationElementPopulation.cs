@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
-using ProcessTrackerBOMFormat.Utility;
+using Formatter.Utility;
 
-namespace ProcessTrackerBOMFormat.Configuration {
+namespace Formatter.Configuration {
 
     /// <summary>
     /// <para>Class <c>ConfigurationElementPopulation</c> defines a bom population event.</para>  
@@ -35,9 +35,9 @@ namespace ProcessTrackerBOMFormat.Configuration {
 
         /// <value>Property <c>FindValue</c> is the value that the column value will be compared against.</value>
         /// <remarks>
-        /// <para>It is required.</para>
+        /// <para>Default value is "".</para>
         /// </remarks>
-        [ConfigurationProperty("findValue", IsRequired = true)]
+        [ConfigurationProperty("findValue", IsRequired = false, DefaultValue = "")]
         public string FindValue {
             get { return (string)this["findValue"]; }
             set { this["findValue"] = value; }

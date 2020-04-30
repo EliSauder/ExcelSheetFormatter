@@ -1,15 +1,10 @@
 ﻿using Caliburn.Micro;
-using ProcessTrackerBOMFormat.UserInterface.Interfaces;
-using ProcessTrackerBOMFormat.UserInterface.Models;
+using Formatter.UserInterface.Interfaces;
+using Formatter.UserInterface.Models;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
-namespace ProcessTrackerBOMFormat.UserInterface.ViewModels {
+namespace Formatter.UserInterface.ViewModels {
 
     [Obsolete("This is not being used in favor of a simpler system", false)]
     public class BomFormatViewModel : Conductor<IBomFormatChild>.Collection.AllActive, IBomFormat {

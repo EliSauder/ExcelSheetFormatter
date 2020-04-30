@@ -1,47 +1,74 @@
 ﻿using Caliburn.Micro;
-using ProcessTrackerBOMFormat.Configuration;
-using ProcessTrackerBOMFormat.UserInterface.ViewModels;
+using Formatter.Configuration;
+using Formatter.UserInterface.ViewModels;
+using Formatter.Utility;
 using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Data;
 using System.Windows;
-using System.Windows.Media;
+using Excel = Microsoft.Office.Interop.Excel;
 
-namespace ProcessTrackerBOMFormat {
+namespace Formatter {
     public class Bootstrapper : BootstrapperBase {
 
-        private Regex partNumberRegex;
-        private Brush defaultPartNumberBorderBrush;
-
         private ConfigurationSectionBoms bomConfigurations;
+        private ConfigurationSectionFiles fileConfigurations;
+
+        private static Excel.Application application = null;
 
         public Bootstrapper() {
-
-            partNumberRegex = new Regex(@"^((?:(?:G|T)\\d{5}(?:(?=-)-\\d{1,3}(?:(?=[A-Z])[A-Z]\\d|)|))|(?:(?:V)?\\d{6,7}Z))$");
-
-            try {
-                bomConfigurations = (ConfigurationSectionBoms)ConfigurationManager.GetSection(Properties.Resources.BOM_CONFIGURATION_SECTION);
-                this.Initialize();
-            }
-            catch (Exception e) {
-                int indexOfParan = e.Message.IndexOf("(");
-                int messageEnd = indexOfParan == -1 ? e.Message.Length : indexOfParan;
-                int indexOfLine = e.Message.IndexOf("line");
-
-                string lineNumber = indexOfLine == -1 ? "" : e.Message.Substring(indexOfLine);
-                string lineError = indexOfLine == -1 ? "" : lineNumber.Substring(0, lineNumber.Length - 1);
-
-                MessageBox.Show("Configuration Error:\n\n" + e.Message.Substring(0, messageEnd) + (indexOfLine == -1 ? "" : "\n\n") + lineError, "Error Occured", MessageBoxButton.OK, MessageBoxImage.Error);
-                Application.Current.Shutdown();
-            }
+            this.Initialize();
         }
 
         protected override void OnStartup(object sender, StartupEventArgs e) {
-            this.DisplayRootViewFor<ShellViewModel>();
+
+            try {
+                ConfigurationSectionBoms bomConfigurations = (ConfigurationSectionBoms)ConfigurationManager.GetSection(Properties.Resources.BOM_CONFIGURATION_SECTION);
+                ConfigurationSectionFiles fileConfigurations = (ConfigurationSectionFiles)ConfigurationManager.GetSection(Properties.Resources.FILE_CONFIGURATION_SECTION);
+                
+                foreach(ConfigurationElementBom bom in bomConfigurations.BomCollection) {
+                    foreach(ConfigurationElementColumn column in bom.ColumnCollection) {
+                        if(column.PopulationCollection != null) {
+                            foreach(ConfigurationElementPopulation population in column.PopulationCollection) {
+                                if (bom.ColumnCollection[population.ToColumn] == null) throw new InvalidExpressionException("boms." + bom.Name + ".fields." + column.Name + ".populations." + population.Name + ".toColumn references invalid column");
+                            }
+                        }
+                    }
+                }
+            } catch (Exception error) {
+                MessageBox.Show("Configuration Error:\n\n" + ErrorFormating.FormatException(error), "Configuration Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+                return;
+            }
+
+            BackgroundWorker worker = new BackgroundWorker();
+
+            worker.DoWork += (o, s) => CreateExcelInstance();
+
+            worker.RunWorkerAsync();
+
+            DisplayRootViewFor<ShellViewModel>();
         }
+
+        public static void CreateExcelInstance() {
+            application = new Excel.Application();
+        }
+
+        public static Excel.Application GetExcelInstance() {
+            return application;
+        }
+
+        public static void ClearOpenWorkbooks() {
+            foreach(Excel.Workbook wb in application.Workbooks) {
+                wb.Close();
+            }
+        }
+
+        public static void CloseExcelInstance() {
+            if (application != null) try { application.Quit(); } catch(Exception e) { }
+        }
+
+        ~Bootstrapper() => CloseExcelInstance();
     }
 }

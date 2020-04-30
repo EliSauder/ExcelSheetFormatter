@@ -1,7 +1,7 @@
-﻿using ProcessTrackerBOMFormat.Utility;
+﻿using Formatter.Utility;
 using System.Configuration;
 
-namespace ProcessTrackerBOMFormat.Configuration {
+namespace Formatter.Configuration {
 
     /// <summary>
     /// Class <c>ConfigurationSectionBoms</c> defines the bom section. This section will contain any bom types that the program will look for.
@@ -20,19 +20,5 @@ namespace ProcessTrackerBOMFormat.Configuration {
                 return bomCollection; 
             }
         }
-
-        /// <value>Proeprty <c>OutputType</c> is the type of output the program will use in the output file.</value>
-        /// <remarks>
-        /// <para>It is required.</para>
-        /// <para>Default value: individual</para>
-        /// <para>Must matche the regex: "^individual|compact$"</para>
-        /// </remarks>
-        //TODO: Convert OutputType to an enum output. 
-        [ConfigurationProperty("outputType", DefaultValue = "INDIVIDUAL", IsRequired = true)]
-        public BomOutputType OutputType {
-            get { return (BomOutputType)base["outputType"]; }
-            set { base["outputType"] = value; }
-        }
-
     }
 }
