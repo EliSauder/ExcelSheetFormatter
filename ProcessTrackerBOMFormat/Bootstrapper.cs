@@ -3,22 +3,39 @@ using Formatter.Configuration;
 using Formatter.UserInterface.ViewModels;
 using Formatter.Utility;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
+using System.Linq;
 using System.Windows;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Formatter {
     public class Bootstrapper : BootstrapperBase {
 
-        private ConfigurationSectionBoms bomConfigurations;
-        private ConfigurationSectionFiles fileConfigurations;
+        private const string VIEWMODEL_SUFFIX = "ViewModel";
 
-        private static Excel.Application application = null;
+        private static Excel.Application _application = null;
+        private readonly SimpleContainer _containter = new SimpleContainer();
 
         public Bootstrapper() {
             this.Initialize();
+        }
+
+        protected override void Configure() {
+            _containter.Instance(_containter);
+            _containter
+                .Singleton<IWindowManager, WindowManager>()
+                .Singleton<IEventAggregator, EventAggregator>()
+                .Singleton<Excel.Application, Excel.Application>();
+
+            GetType().Assembly.GetTypes()
+                .Where(type => type.IsClass)
+                .Where(type => type.Name.EndsWith(VIEWMODEL_SUFFIX))
+                .ToList()
+                .ForEach(viewModelType => _containter.RegisterPerRequest(
+                    viewModelType, viewModelType.ToString(), viewModelType));
         }
 
         protected override void OnStartup(object sender, StartupEventArgs e) {
@@ -26,11 +43,11 @@ namespace Formatter {
             try {
                 ConfigurationSectionBoms bomConfigurations = (ConfigurationSectionBoms)ConfigurationManager.GetSection(Properties.Resources.BOM_CONFIGURATION_SECTION);
                 ConfigurationSectionFiles fileConfigurations = (ConfigurationSectionFiles)ConfigurationManager.GetSection(Properties.Resources.FILE_CONFIGURATION_SECTION);
-                
-                foreach(ConfigurationElementBom bom in bomConfigurations.BomCollection) {
-                    foreach(ConfigurationElementColumn column in bom.ColumnCollection) {
-                        if(column.PopulationCollection != null) {
-                            foreach(ConfigurationElementPopulation population in column.PopulationCollection) {
+
+                foreach (ConfigurationElementBom bom in bomConfigurations.BomCollection) {
+                    foreach (ConfigurationElementColumn column in bom.ColumnCollection) {
+                        if (column.PopulationCollection != null) {
+                            foreach (ConfigurationElementPopulation population in column.PopulationCollection) {
                                 if (bom.ColumnCollection[population.ToColumn] == null) throw new InvalidExpressionException("boms." + bom.Name + ".fields." + column.Name + ".populations." + population.Name + ".toColumn references invalid column");
                             }
                         }
@@ -49,24 +66,45 @@ namespace Formatter {
             worker.RunWorkerAsync();
 
             DisplayRootViewFor<ShellViewModel>();
+            //DisplayRootViewFor<BomFormatDirectorySelectViewModel>();
+        }
+
+        protected override object GetInstance(Type service, string key) {
+            return this._containter.GetInstance(service, key);
+        }
+
+        protected override IEnumerable<object> GetAllInstances(Type service) {
+            return this._containter.GetAllInstances(service);
+        }
+
+        protected override void BuildUp(object instance) {
+            _containter.BuildUp(instance);
+        }
+
+        protected override void OnExit(object sender, EventArgs e) {
+            base.OnExit(sender, e);
         }
 
         public static void CreateExcelInstance() {
-            application = new Excel.Application();
+            _application = new Excel.Application();
+            CloseExcelInstance();
         }
 
         public static Excel.Application GetExcelInstance() {
-            return application;
+            return _application;
         }
 
         public static void ClearOpenWorkbooks() {
-            foreach(Excel.Workbook wb in application.Workbooks) {
-                wb.Close();
+            foreach (Excel.Workbook wb in _application.Workbooks) {
+                wb.Close(0);
             }
         }
 
         public static void CloseExcelInstance() {
-            if (application != null) try { application.Quit(); } catch(Exception e) { }
+            if (_application != null) try {
+                    ClearOpenWorkbooks();
+                    _application.Quit(); 
+                } catch (Exception) { }
         }
 
         ~Bootstrapper() => CloseExcelInstance();

@@ -1,33 +1,41 @@
-﻿using System;
+﻿using Formatter.Configuration;
+using System;
 using System.Configuration;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Formatter.Configuration;
 
-namespace Formatter {
+namespace Formatter
+{
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window {
+    public partial class MainWindow : Window
+    {
 
         private Regex partNumberRegex;
         private Brush defaultPartNumberBorderBrush;
 
         private ConfigurationSectionBoms bomConfigurations;
 
-        public MainWindow() {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'MainWindow.MainWindow()'
+        public MainWindow()
+        {
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'MainWindow.MainWindow()'
             InitializeComponent();
 
             partNumberRegex = new Regex(@"^((?:(?:G|T)\\d{5}(?:(?=-)-\\d{1,3}(?:(?=[A-Z])[A-Z]\\d|)|))|(?:(?:V)?\\d{6,7}Z))$");
 
             defaultPartNumberBorderBrush = ProductNumber.BorderBrush;
 
-            try {
+            try
+            {
                 bomConfigurations = (ConfigurationSectionBoms)ConfigurationManager.GetSection(Properties.Resources.BOM_CONFIGURATION_SECTION);
-            } catch(Exception e) {
+            }
+            catch (Exception e)
+            {
                 int indexOfParan = e.Message.IndexOf("(");
                 int messageEnd = indexOfParan == -1 ? e.Message.Length : indexOfParan;
                 int indexOfLine = e.Message.IndexOf("line");
@@ -40,17 +48,21 @@ namespace Formatter {
             }
         }
 
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e) {
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
             FormBorder.Focus();
         }
 
-        private void ProductNumber_LostFocus(object sender, RoutedEventArgs e) {
+        private void ProductNumber_LostFocus(object sender, RoutedEventArgs e)
+        {
             string value = ((TextBox)sender).Text;
 
-            if (partNumberRegex.IsMatch(value)) {
+            if (partNumberRegex.IsMatch(value))
+            {
                 ((TextBox)sender).BorderBrush = defaultPartNumberBorderBrush;
             }
-            else if (value.Length != 0) {
+            else if (value.Length != 0)
+            {
                 ((TextBox)sender).BorderBrush = Brushes.Red;
             }
         }

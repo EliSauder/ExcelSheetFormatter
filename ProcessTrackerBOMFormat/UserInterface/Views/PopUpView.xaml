@@ -3,12 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Formatter.UserInterface.Views"
+        xmlns:local="clr-namespace:Formatter.UserInterface.Views" 
+        xmlns:usercontrollib="clr-namespace:UserControlLib;assembly=UserControlLib"
+        xmlns:cal="http://www.caliburnproject.org"
         mc:Ignorable="d"
-        Title="PopUpView" Height="400" Width="500"
+        Height="{Binding Path=WindowHeight, Mode=TwoWay}" Width="{Binding Path=WindowWidth, Mode=TwoWay}"
         MinHeight="300" MinWidth="400"
         WindowStyle="None"
-        MouseDown="Window_MouseDown" AllowsTransparency="True" Background="Transparent">
+        ResizeMode="CanResize"
+        AllowsTransparency="True" Background="Transparent"
+        WindowState="{Binding Path=CurrentWindowState, Mode=TwoWay}"
+        x:Name="popUp">
     <Border Margin="3" x:Name="FormBorder" Background="#FFF" CornerRadius="20 20 10 10" Focusable="True">
         <Border.Effect>
             <DropShadowEffect 
@@ -28,61 +33,28 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="10"/>
             </Grid.RowDefinitions>
 
-            <Border Background="#003871" Grid.Row="0" Grid.ColumnSpan="3" CornerRadius="9 9 0 0">
-                <Border.Effect>
-                    <DropShadowEffect 
-                        ShadowDepth="0" 
-                        Direction="0" 
-                        Color="Black" 
-                        Opacity="1" 
-                        BlurRadius="3"/>
-                </Border.Effect>
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Button x:Name="Exit" BorderThickness="0" Grid.Column="1" FontSize="15" Foreground="White" Background="#a11500" Width="40">
-                        &#10006;
-                        <Button.Resources>
-                            <Style TargetType="{x:Type Border}">
-                                <Setter Property="CornerRadius" Value="9 9 0 0"/>
-                            </Style>
-                        </Button.Resources>
-                        <Button.Effect>
-                            <DropShadowEffect 
-                                ShadowDepth="0" 
-                                Direction="180" 
-                                Color="Black" 
-                                Opacity="0.6" 
-                                BlurRadius="2"/>
-                        </Button.Effect>
-                    </Button>
-
-                </Grid>
-            </Border>
-
-            <Label Margin="0 10 0 0" Grid.Row="1" FontSize="15" Grid.Column="1">Cleanup performed:</Label>
-
-            <ScrollViewer Grid.Row="2" Grid.Column="1" VerticalScrollBarVisibility="Auto">
-                <TreeView x:Name="TreeView" ItemsSource="{Binding Path=RootNodes, Mode=TwoWay}" 
-                          BorderThickness="0" VirtualizingStackPanel.IsVirtualizing="True"
-                          VirtualizingStackPanel.VirtualizationMode="Standard" ScrollViewer.CanContentScroll="False"/>
-            </ScrollViewer>
+            <usercontrollib:TitleBar x:Name="popUpTitle" Grid.ColumnSpan="3" Grid.Row="0" TitleText="{Binding Path=Title, ElementName=popUp}" TitleFontSize="17"
+                                     ButtonWidth="45" MouseDown="popUpTitle_MouseDown"
+                                     MaximizeVisibility="Collapsed"
+                                     MinimizeVisibility="Collapsed"
+                                     cal:Message.Attach=
+                                        "[Event Minimize] = [Action Minimize]; 
+                                         [Event Maximize] = [Action Maximize]; 
+                                         [Event Exit] = [Action Exit];"/>
+            
+            <ContentControl Grid.Row="1" Grid.Column="1" x:Name="ActiveItem"/>
 
             <Button x:Name="Continue"
+                    cal:Message.Attach="[Event Click] = [Action Exit]"
                     Margin="0 10 0 0" 
                     HorizontalAlignment="Right" 
                     VerticalAlignment="Bottom" 
-                    Grid.Row="3" 
+                    Grid.Row="2" 
                     Grid.Column="1"
                     Width="100" 
                     Height="30"

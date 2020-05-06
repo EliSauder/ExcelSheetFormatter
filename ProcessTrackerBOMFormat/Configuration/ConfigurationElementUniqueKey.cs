@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Configuration;
 
-namespace Formatter.Configuration {
+namespace Formatter.Configuration
+{
 
     /// <summary>
     /// <para>Class <c>ConfigurationElementUniqueKey</c> defines a bom find location/value.</para>  
@@ -9,7 +10,8 @@ namespace Formatter.Configuration {
     /// </summary>
     /// <see cref="ConfigurationElement"/>
     [Obsolete("Not used in preference for a form user selection.")]
-    public class ConfigurationElementUniqueKey : ConfigurationElement {
+    public class ConfigurationElementUniqueKey : ConfigurationElement
+    {
 
         /// <value>Property <c>WhereLook</c> tells the program where to look for the value.</value>
         /// <remarks>
@@ -18,9 +20,9 @@ namespace Formatter.Configuration {
         /// </remarks>
         [ConfigurationProperty("whereLook", IsRequired = true)]
         [RegexStringValidator(@"^[A-Z]+\d+(?:,[A-Z]+\d+)*$")]
-        public string WhereLook { 
-            get { return (string)this["whereLook"]; } 
-            set { this["whereLook"] = value; } 
+        public string WhereLook {
+            get { return (string)this["whereLook"]; }
+            set { this["whereLook"] = value; }
         }
 
         /// <value>Property <c>ValueFind</c> is the value the program will look for in the WhereLook location.</value>

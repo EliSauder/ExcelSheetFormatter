@@ -15,10 +15,10 @@ using System.Windows.Shapes;
 
 namespace Formatter.UserInterface.Views {
     /// <summary>
-    /// Interaction logic for BomFormatView.xaml
+    /// Interaction logic for FolderSelectorView.xaml
     /// </summary>
-    public partial class BomFormatView : UserControl {
-        public BomFormatView() {
+    public partial class FolderSelectorView : UserControl {
+        public FolderSelectorView() {
             InitializeComponent();
         }
     }

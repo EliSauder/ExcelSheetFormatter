@@ -1,9 +1,12 @@
 ﻿using System;
 
-namespace Formatter.Utility {
-    public class ErrorFormating {
+namespace Formatter.Utility
+{
+    public class ErrorFormating
+    {
 
-        public static string FormatException(Exception e) {
+        public static string FormatException(Exception e)
+        {
             int indexOfParan = e.Message.IndexOf("(");
             int messageEnd = indexOfParan == -1 ? e.Message.Length : indexOfParan;
             int indexOfLine = e.Message.IndexOf("line");

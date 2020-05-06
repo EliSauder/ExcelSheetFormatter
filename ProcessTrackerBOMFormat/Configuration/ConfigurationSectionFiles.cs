@@ -1,7 +1,9 @@
 ﻿using System.Configuration;
 
-namespace Formatter.Configuration {
-    public class ConfigurationSectionFiles : ConfigurationSection {
+namespace Formatter.Configuration
+{
+    public class ConfigurationSectionFiles : ConfigurationSection
+    {
 
         [ConfigurationProperty("rootDirectory", IsRequired = true)]
         public string RootDirectory {
@@ -10,7 +12,7 @@ namespace Formatter.Configuration {
         }
 
         [ConfigurationProperty("inputFolder", IsRequired = true)]
-        public string InputDirectory {
+        public string InputFolder {
             get { return (string)base["inputFolder"]; }
             set { base["inputFolder"] = value; }
         }

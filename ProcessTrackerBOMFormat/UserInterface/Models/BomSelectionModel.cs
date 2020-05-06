@@ -3,19 +3,24 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 
-namespace Formatter.UserInterface.Models {
-    public class BomSelectionModel {
+namespace Formatter.UserInterface.Models
+{
+    public class BomSelectionModel
+    {
 
         private readonly Dictionary<string, string> _boms = new Dictionary<string, string>();
         private readonly List<string> _bomKeyList = new List<string>();
         private KeyValuePair<string, string> _selectedBom = new KeyValuePair<string, string>(null, null);
         public int NumberBoms { get; } = 0;
 
-        public BomSelectionModel() {
+        public BomSelectionModel()
+        {
             ConfigurationSectionBoms configuration = (ConfigurationSectionBoms)ConfigurationManager.GetSection(Properties.Resources.BOM_CONFIGURATION_SECTION);
 
-            foreach (ConfigurationElementBom bom in configuration.BomCollection) {
-                if (bom.Enabled) {
+            foreach (ConfigurationElementBom bom in configuration.BomCollection)
+            {
+                if (bom.Enabled)
+                {
                     _boms.Add(bom.Name, bom.DisplayName);
                     _bomKeyList.Add(bom.Name);
                     NumberBoms++;
@@ -35,17 +40,20 @@ namespace Formatter.UserInterface.Models {
             get { return new KeyValuePair<string, string>(_bomKeyList[number], _boms[_bomKeyList[number]]); }
         }
 
-        public void select(string key) {
+        public void select(string key)
+        {
             if (!_boms.ContainsKey(key)) throw new ArgumentException("Value pair provided is not found in the list of BOMs.");
             _selectedBom = new KeyValuePair<string, string>(key, _boms[key]);
         }
-        
-        public void select(int number) {
+
+        public void select(int number)
+        {
             if (!_boms.ContainsKey(_bomKeyList[number])) throw new ArgumentException("Value pair provided is not found in the list of BOMs.");
             _selectedBom = new KeyValuePair<string, string>(_bomKeyList[number], _boms[_bomKeyList[number]]);
         }
 
-        public bool HasSelectedItem() {
+        public bool HasSelectedItem()
+        {
             return _selectedBom.Key != null;
         }
 

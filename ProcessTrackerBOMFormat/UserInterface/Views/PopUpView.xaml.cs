@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Formatter.UserInterface.ViewModels;
+using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
-namespace Formatter.UserInterface.Views {
+namespace Formatter.UserInterface.Views
+{
     /// <summary>
     /// Interaction logic for PopUpView.xaml
     /// </summary>
@@ -21,9 +13,9 @@ namespace Formatter.UserInterface.Views {
             InitializeComponent();
         }
 
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e) {
-            if (e.ChangedButton == MouseButton.Left)
-                this.DragMove();
+        private void popUpTitle_MouseDown(object sender, MouseButtonEventArgs e) {
+            if (this.WindowState == WindowState.Maximized) ((PopUpViewModel)this.DataContext).Maximize();
+            if (e.ChangedButton == MouseButton.Left) this.DragMove();
         }
     }
 }

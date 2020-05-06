@@ -26,7 +26,21 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="50 10">
+            <Grid Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 5 10 0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" Margin="0 0 10 0" >IO Config: </TextBlock>
+                    <Button Width="30" Height="30" Background="Transparent" BorderBrush="Transparent" x:Name="FolderSelect">
+                        <Image Source="/UserControlLib;component/Resources/folder_blue.ico" />
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="3"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            
+            <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="50 20 50 10">
                 <Label 
                             Foreground="Black" 
                             HorizontalAlignment="Center" 

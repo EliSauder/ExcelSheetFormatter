@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Excel;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
-using Microsoft.Office.Interop.Excel;
 using _Excel = Microsoft.Office.Interop.Excel;
 
-namespace Formatter.UserInterface.Models {
-    public class BomExcelModel {
+namespace Formatter.UserInterface.Models
+{
+    public class BomExcelModel
+    {
 
         public const string CELL_REGEX = @"^([A-Z]+)([0-9]+)$";
 
@@ -15,7 +17,8 @@ namespace Formatter.UserInterface.Models {
         private Workbook _workbook = null;
         private Worksheet _worksheet = null;
 
-        public BomExcelModel(string filePath) {
+        public BomExcelModel(string filePath)
+        {
             this._filePath = filePath;
             if (!File.Exists(filePath)) throw new FileNotFoundException("File requrested does not exist.");
 
@@ -52,7 +55,8 @@ namespace Formatter.UserInterface.Models {
             }
         }
 
-        public ListColumn GetColumn(int column) {
+        public ListColumn GetColumn(int column)
+        {
             return _worksheet.Columns[1, ++column].Column;
         }
     }

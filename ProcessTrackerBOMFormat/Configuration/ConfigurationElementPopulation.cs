@@ -1,7 +1,8 @@
-﻿using System.Configuration;
-using Formatter.Utility;
+﻿using Formatter.Utility;
+using System.Configuration;
 
-namespace Formatter.Configuration {
+namespace Formatter.Configuration
+{
 
     /// <summary>
     /// <para>Class <c>ConfigurationElementPopulation</c> defines a bom population event.</para>  
@@ -9,7 +10,8 @@ namespace Formatter.Configuration {
     /// when a paticular input is found in one column.</para>
     /// </summary>
     /// <see cref="ConfigurationElement"/>
-    public class ConfigurationElementPopulation : ConfigurationElement {
+    public class ConfigurationElementPopulation : ConfigurationElement
+    {
 
         /// <value>Property <c>Name</c> is the name of the population as well as the key for the collection</value>
         /// <remarks>

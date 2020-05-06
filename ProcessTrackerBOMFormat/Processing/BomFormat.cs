@@ -29,7 +29,7 @@ namespace Formatter.Processing {
             this.fileConfigurations = fileConfigurations;
             this.bomConfiguration = bomConfiguration;
 
-            this.inputFolder = fileConfigurations.RootDirectory + fileConfigurations.InputDirectory;
+            this.inputFolder = fileConfigurations.RootDirectory + fileConfigurations.InputFolder;
             this.inputExtention = bomConfiguration.InputFileExtention;
 
             this.bomOutputType = bomOutputType;
@@ -47,7 +47,7 @@ namespace Formatter.Processing {
 
             try {
                 File.OpenWrite(outputFileName.ToString()).Close();
-            } catch (Exception e) {
+            } catch (Exception) {
                 throw new FileNotFoundException("Unable to open file: " + outputFileName.ToString() + "\nCheck to see if you have it open.");
             }
 
@@ -59,13 +59,13 @@ namespace Formatter.Processing {
 
             s.Stop();
 
-            if(Bootstrapper.GetExcelInstance() == null)
+            if (Bootstrapper.GetExcelInstance() == null)
                 throw new ArgumentNullException("Unable to open instance of excel.");
 
             Bootstrapper.ClearOpenWorkbooks();
 
             BomInput bomInput = new BomInput(productNumber, inputFolder, inputExtention);
-            BomOutput bomOutput = new BomOutput(Bootstrapper.GetExcelInstance(), bomInput, bomConfiguration, fileConfigurations) ;
+            BomOutput bomOutput = new BomOutput(Bootstrapper.GetExcelInstance(), bomInput, bomConfiguration, fileConfigurations);
             new BomLoad(bomConfiguration, bomOutputType, bomInput, bomOutput);
             BomPopulations bomPopulations = new BomPopulations(bomOutput, bomConfiguration.ColumnCollection);
             BomCleanup bomCleanup = new BomCleanup(bomConfiguration.ColumnCollection, bomPopulations);
@@ -83,12 +83,11 @@ namespace Formatter.Processing {
 
             bomOutput.SaveWorkbook();
 
-            windowManager.ShowDialog(new PopUpViewModel(items), null, settings);
+            BomFormatCleanUpReportPopUpViewModel cleanupViewModel = new BomFormatCleanUpReportPopUpViewModel(items);
+
+            windowManager.ShowDialog(new PopUpViewModel(cleanupViewModel), null, settings);
 
             Bootstrapper.GetExcelInstance().Visible = true;
         }
-
-
-
     }
 }

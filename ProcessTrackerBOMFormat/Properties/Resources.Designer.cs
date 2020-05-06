@@ -88,11 +88,30 @@ namespace Formatter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon folder_blue {
+            get {
+                object obj = ResourceManager.GetObject("folder_blue", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .xlsx.
         /// </summary>
         internal static string OUTPUTFILE_EXTENTION {
             get {
                 return ResourceManager.GetString("OUTPUTFILE_EXTENTION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to folder-blue-512.
+        /// </summary>
+        internal static string String {
+            get {
+                return ResourceManager.GetString("String", resourceCulture);
             }
         }
     }

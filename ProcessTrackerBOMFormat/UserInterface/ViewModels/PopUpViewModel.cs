@@ -1,54 +1,71 @@
 ﻿using Caliburn.Micro;
+using Formatter.UserInterface.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
+using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace Formatter.UserInterface.ViewModels {
-    public class PopUpViewModel : Screen {
+    public class PopUpViewModel : Conductor<IPopUpContent>.Collection.OneActive {
 
+        private WindowState _currentWindowState = WindowState.Normal;
+        private double _windowWidth = 400;
+        private double _windowHeight = 300;
 
-        private Collection<TreeViewItem> _inputNodes = null;
-        private List<TreeViewItem> _rootNodes = null;
-        public List<TreeViewItem> RootNodes {
-            get {
-                return _rootNodes;
-            }
+        public WindowState CurrentWindowState {
+            get => _currentWindowState;
             set {
-                _rootNodes = value;
-                NotifyOfPropertyChange(() => RootNodes);
+                _currentWindowState = value;
+                NotifyOfPropertyChange("CurrentWindowState");
             }
         }
 
-        public PopUpViewModel(Collection<TreeViewItem> items) {
+        public double WindowHeight {
+            get => _windowHeight;
+            set {
+                _windowHeight = value;
+                NotifyOfPropertyChange("WindowHeight");
+            }
+        }
 
-            RootNodes = new List<TreeViewItem>();
-            _inputNodes = items;
+        public double WindowWidth {
+            get => _windowWidth;
+            set {
+                _windowWidth = value;
+                NotifyOfPropertyChange("WindowWidth");
+            }
+        }
 
-            Activate();
+        public DialogResult DialogResult { get; private set; }
+
+        public PopUpViewModel(IPopUpContent conductor) : this(conductor, conductor.Title) { }
+
+        public PopUpViewModel(IPopUpContent conductor, string title) {
+            this.ActivateItem(conductor);
+            this.DisplayName = title;
+            this.WindowHeight = conductor.StartingHeight ?? WindowHeight;
+            this.WindowWidth = conductor.StartingWidth ?? WindowWidth;
+        }
+
+        public void Minimize() {
+            this.CurrentWindowState = WindowState.Minimized;
+        }
+
+        public void Maximize() {
+            this.CurrentWindowState = this.CurrentWindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
         }
 
         public void Exit() {
-            this.TryClose();
-        }
-
-        public void Continue() {
-            this.Exit();
-        }
-
-        public void Activate() {
-
-            List<TreeViewItem> nodes = new List<TreeViewItem>();
-
-            foreach (TreeViewItem item in _inputNodes) {
-                nodes.Add(item);
+            if (!this.ActiveItem.CanExit()) this.ActiveItem.IsError();
+            else {
+                this.DialogResult = this.ActiveItem.Exit();
+                this.TryClose();
             }
-
-            RootNodes = nodes;
         }
     }
 }

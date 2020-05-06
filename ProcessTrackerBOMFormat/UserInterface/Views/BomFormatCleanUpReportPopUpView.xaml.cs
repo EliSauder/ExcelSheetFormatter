@@ -15,11 +15,17 @@ using System.Windows.Shapes;
 
 namespace Formatter.UserInterface.Views {
     /// <summary>
-    /// Interaction logic for BomFormatDataDisplayView.xaml
+    /// Interaction logic for BomFormatCleanUpReportPopUpView.xaml
     /// </summary>
-    public partial class BomFormatDataDisplayView : UserControl {
-        public BomFormatDataDisplayView() {
+    public partial class BomFormatCleanUpReportPopUpView : UserControl {
+        public BomFormatCleanUpReportPopUpView() {
             InitializeComponent();
+        }
+
+        private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
         }
     }
 }

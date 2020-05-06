@@ -2,7 +2,8 @@
 using System.ComponentModel;
 using System.Configuration;
 
-namespace Formatter.Configuration {
+namespace Formatter.Configuration
+{
 
     /// <summary>
     /// <para>Class <c>ConfigurationElementColumn</c> defines a bom column element.</para>  
@@ -10,7 +11,8 @@ namespace Formatter.Configuration {
     /// file and decide what actions to perform on each column.</para>
     /// </summary>
     /// <see cref="ConfigurationElement"/>
-    public class ConfigurationElementColumn : ConfigurationElement {
+    public class ConfigurationElementColumn : ConfigurationElement
+    {
 
         /// <value>Property <c>Name</c> defines the name of the column and is the key for the collection</value>
         /// <remarks>
@@ -19,7 +21,7 @@ namespace Formatter.Configuration {
         /// </remarks>
         [ConfigurationProperty("name", IsKey = true, IsRequired = true)]
         public string Name {
-            get {return (string)this["name"];}
+            get { return (string)this["name"]; }
             set {
                 this["name"] = value;
                 if (Output.Length == 0) Output = value;
@@ -28,7 +30,9 @@ namespace Formatter.Configuration {
         }
 
         [ConfigurationProperty("identifierOrder", IsRequired = false, DefaultValue = -1)]
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationElementColumn.IdentifierOrder'
         public int IdentifierOrder {
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationElementColumn.IdentifierOrder'
             get { return (int)this["identifierOrder"]; }
             set { this["identifierOrder"] = value; }
         }
@@ -40,7 +44,7 @@ namespace Formatter.Configuration {
         [ConfigurationProperty("isQuantity", DefaultValue = false, IsRequired = false)]
         public bool IsQuantity {
             get { return (bool)this["isQuantity"]; }
-            set {this["isQuantity"] = value;}
+            set { this["isQuantity"] = value; }
         }
 
         /// <value>Property <c>DataType</c> defines the datatype that the column will contain.</value>
@@ -81,8 +85,8 @@ namespace Formatter.Configuration {
         /// </remarks>
         [ConfigurationProperty("header", IsRequired = true)]
         public string Header {
-            get {return (string)this["header"];}
-            set {this["header"] = value;}
+            get { return (string)this["header"]; }
+            set { this["header"] = value; }
         }
 
         /// <value>Property <c>Output</c> is the name of the column that the output file will contain instead of the one in the input file.</value>
@@ -94,7 +98,7 @@ namespace Formatter.Configuration {
             get { return (string)this["output"]; }
             set {
                 if (value.Length == 0) this["output"] = Name;
-                else this["output"] = value; 
+                else this["output"] = value;
             }
         }
 
@@ -106,8 +110,8 @@ namespace Formatter.Configuration {
         /// </remarks>
         [ConfigurationProperty("order", DefaultValue = -1, IsRequired = false)]
         public int Order {
-            get {return (int)this["order"];}
-            set {this["order"] = value;}
+            get { return (int)this["order"]; }
+            set { this["order"] = value; }
         }
 
         /// <value>Property <c>Enabled</c> defines whether the program will actually check for/use this column.</value>
@@ -151,7 +155,9 @@ namespace Formatter.Configuration {
         }
 
         [ConfigurationProperty("cleanupActions", IsDefaultCollection = false)]
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationElementColumn.CleanupCollection'
         public ConfigurationCollectionCleanUp CleanupCollection {
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationElementColumn.CleanupCollection'
             get { return (ConfigurationCollectionCleanUp)base["cleanupActions"]; }
             set { base["cleanupActions"] = value; }
         }

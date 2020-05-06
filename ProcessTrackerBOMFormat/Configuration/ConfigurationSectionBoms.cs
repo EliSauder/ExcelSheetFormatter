@@ -1,13 +1,14 @@
-﻿using Formatter.Utility;
-using System.Configuration;
+﻿using System.Configuration;
 
-namespace Formatter.Configuration {
+namespace Formatter.Configuration
+{
 
     /// <summary>
     /// Class <c>ConfigurationSectionBoms</c> defines the bom section. This section will contain any bom types that the program will look for.
     /// It also contains how the ouput will be format.
     /// </summary>
-    public class ConfigurationSectionBoms : ConfigurationSection {
+    public class ConfigurationSectionBoms : ConfigurationSection
+    {
 
         /// <value>Property <c>BomCollection</c> is the collection of boms in the config file.</value>
         /// <remarks>
@@ -17,7 +18,7 @@ namespace Formatter.Configuration {
         public ConfigurationCollectionBoms BomCollection {
             get {
                 ConfigurationCollectionBoms bomCollection = (ConfigurationCollectionBoms)base[""];
-                return bomCollection; 
+                return bomCollection;
             }
         }
     }

@@ -1,7 +1,8 @@
 ﻿using Formatter.Utility;
 using System.Configuration;
 
-namespace Formatter.Configuration {
+namespace Formatter.Configuration
+{
 
     /// <summary>
     /// <para>Class <c>ConfigurationElementBom</c> defines a bom configuration element.</para>  
@@ -11,7 +12,8 @@ namespace Formatter.Configuration {
     /// look for/replacesments that need to be made while formatting the bom.</para>
     /// </summary>
     /// <see cref="ConfigurationElement"/>
-    public class ConfigurationElementBom : ConfigurationElement {
+    public class ConfigurationElementBom : ConfigurationElement
+    {
 
         /// <value>
         /// Property <c>Name</c> defines the name of the bom. 
@@ -19,11 +21,11 @@ namespace Formatter.Configuration {
         /// </value>
         [ConfigurationProperty("name", IsKey = true, IsRequired = true)]
         public string Name {
-            get { return (string)this["name"]; } 
+            get { return (string)this["name"]; }
             set {
                 if (string.IsNullOrEmpty(DisplayName)) DisplayName = value;
-                this["name"] = value; 
-            } 
+                this["name"] = value;
+            }
         }
 
         /// <value>Proeprty <c>OutputType</c> is the type of output the program will use in the output file.</value>
@@ -49,14 +51,18 @@ namespace Formatter.Configuration {
         }
 
         [ConfigurationProperty("outputSheetName", DefaultValue = "")]
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationElementBom.OutputSheetName'
         public string OutputSheetName {
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationElementBom.OutputSheetName'
             get { return (string)this["outputSheetName"]; }
             set { this["outputSheetName"] = value; }
         }
 
         [ConfigurationProperty("inputFileExtention", IsRequired = true, DefaultValue = ".xlsx")]
         [RegexStringValidator(@"\.xlsx|\.csv|\.xls")]
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationElementBom.InputFileExtention'
         public string InputFileExtention {
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationElementBom.InputFileExtention'
             get { return (string)this["inputFileExtention"]; }
             set { this["inputFileExtention"] = value; }
         }

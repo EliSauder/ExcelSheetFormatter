@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
-using System.Data;
 
-namespace Formatter.Configuration {
+namespace Formatter.Configuration
+{
 
     /// <summary>
     /// Class <c>ConfigurationCollectionBoms</c> defines a 
@@ -9,15 +9,18 @@ namespace Formatter.Configuration {
     /// that defines a collection of BOMs.
     /// </summary>
     /// <see cref="ConfigurationElementCollection"/>
-    public class ConfigurationCollectionBoms : ConfigurationElementCollection {
+    public class ConfigurationCollectionBoms : ConfigurationElementCollection
+    {
 
         /// <summary>
         /// Creates a collection with a single element as long 
         /// as the name is not and empty string.
         /// </summary>
-        public ConfigurationCollectionBoms() {
+        public ConfigurationCollectionBoms()
+        {
             ConfigurationElementBom bom = (ConfigurationElementBom)CreateNewElement();
-            if(!bom.Name.Equals("")) {
+            if (!bom.Name.Equals(""))
+            {
                 Add(bom);
             }
         }
@@ -32,7 +35,8 @@ namespace Formatter.Configuration {
         /// </summary>
         /// <remarks>It will create the element as a <c>ConfigurationElementBom</c></remarks>
         /// <returns>A new configuration element of type ConfigurationElementBom</returns>
-        protected override ConfigurationElement CreateNewElement() {
+        protected override ConfigurationElement CreateNewElement()
+        {
             return new ConfigurationElementBom();
         }
 
@@ -41,10 +45,14 @@ namespace Formatter.Configuration {
         /// </summary>
         /// <param name="element">The elment that you want the key of.</param>
         /// <returns>The key of the element.</returns>
-        protected override object GetElementKey(ConfigurationElement element) {
+        protected override object GetElementKey(ConfigurationElement element)
+        {
             return ((ConfigurationElementBom)element).Name;
         }
 
+
+#pragma warning disable CS1584 // XML comment has syntactically incorrect cref attribute '[]'
+#pragma warning disable CS1658 // Identifier expected. See also error CS1001.
         /// <summary>
         /// Gets the element at the index specified.
         /// </summary>
@@ -52,6 +60,8 @@ namespace Formatter.Configuration {
         /// <seealso cref="[]"/>
         /// <returns>The bom configuration element from the index specified.</returns>
         public ConfigurationElementBom this[int index] {
+#pragma warning restore CS1658 // Identifier expected. See also error CS1001.
+#pragma warning restore CS1584 // XML comment has syntactically incorrect cref attribute '[]'
             get { return (ConfigurationElementBom)BaseGet(index); }
             set {
                 if (BaseGet(index) != null) BaseRemoveAt(index);
@@ -73,7 +83,8 @@ namespace Formatter.Configuration {
         /// </summary>
         /// <param name="field">The element you wish to find the index of.</param>
         /// <returns>The index of the element.</returns>
-        public int IndexOf(ConfigurationElementBom field) {
+        public int IndexOf(ConfigurationElementBom field)
+        {
             return BaseIndexOf(field);
         }
 
@@ -81,7 +92,8 @@ namespace Formatter.Configuration {
         /// Adds an element to the collection
         /// </summary>
         /// <param name="field">The element you wish to add</param>
-        public void Add(ConfigurationElementBom field) {
+        public void Add(ConfigurationElementBom field)
+        {
             BaseAdd(field);
         }
 
@@ -91,7 +103,8 @@ namespace Formatter.Configuration {
         /// </summary>
         /// <param name="element">The element you wish to add</param>
         /// <see cref="ConfigurationElement"/>
-        protected override void BaseAdd(ConfigurationElement element) {
+        protected override void BaseAdd(ConfigurationElement element)
+        {
             BaseAdd(element, false);
         }
 
