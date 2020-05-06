@@ -2,12 +2,15 @@
 using Formatter.Configuration;
 using Formatter.Processing;
 using Formatter.UserInterface.Models;
+using Formatter.UserInterface.ViewModelFactories;
 using Formatter.Utility;
+using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Dynamic;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 
 namespace Formatter.UserInterface.ViewModels
 {
@@ -15,6 +18,7 @@ namespace Formatter.UserInterface.ViewModels
 
         private BomSelectionModel _bomSelectionModel = new BomSelectionModel();
         private ProductNumberModel _productNumber = new ProductNumberModel();
+
 
         public string ProductNumber {
             get { return _productNumber.ProductNumber; }
@@ -38,6 +42,16 @@ namespace Formatter.UserInterface.ViewModels
                 _bomSelectionModel.SelectedItem = value;
                 NotifyOfPropertyChange(() => SelectedItem);
             }
+        }
+
+        private IWindowManager _windowManager;
+        private SimpleContainer _container;
+        private IFactory<PopUpViewModel> _popUpViewModelFactory;
+
+        public BomFormatFormViewModel(IWindowManager windowManager, SimpleContainer container, IFactory<PopUpViewModel> popUpViewFactory) {
+            this._windowManager = windowManager;
+            this._container = container;
+            _popUpViewModelFactory = popUpViewFactory;
         }
 
         public void Process() {
@@ -75,17 +89,13 @@ namespace Formatter.UserInterface.ViewModels
         }
 
         public void FolderSelect() {
-            WindowManager windowManager = new WindowManager();
-
             dynamic settings = new ExpandoObject();
             settings.WindowStyle = WindowStyle.None;
-            settings.ShowInTaskbar = false;
+            settings.ShowInTaskbar = true;
 
-            ConfigurationSectionFiles fileConfig = (ConfigurationSectionFiles)ConfigurationManager.GetSection(Properties.Resources.FILE_CONFIGURATION_SECTION);
+            BomFormatDirectorySelectViewModel directorySelectViewModel = _container.GetInstance<BomFormatDirectorySelectViewModel>();
 
-            BomFormatDirectorySelectViewModel directorySelectViewModel = new BomFormatDirectorySelectViewModel(fileConfig);
-
-            windowManager.ShowDialog(new PopUpViewModel(directorySelectViewModel), null, settings);
+            _windowManager.ShowDialog(_popUpViewModelFactory.Create(directorySelectViewModel, "Directory Configuration"), null, settings);
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Caliburn.Micro;
 using DocumentFormat.OpenXml.Vml;
+using Formatter.Configuration;
+using Formatter.UserInterface.EventModels;
 using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,8 @@ namespace Formatter.UserInterface.ViewModels {
     public class FolderSelectorViewModel : Screen {
 
         private IEventAggregator _events;
+
+        public FolderSelectorViewModel RootFolder { get; set; } = null;
 
         private string _textBoxContent = "";
         public string TextBoxContent {
@@ -48,27 +52,14 @@ namespace Formatter.UserInterface.ViewModels {
                 NotifyOfPropertyChange(() => LabelFontSize);
             }
         }
-        
-        public FolderSelectorViewModel(string labelContent, IEventAggregator events) : this(labelContent, 20, events) {}
 
-        public FolderSelectorViewModel(string labelContent, double labelFontSize, IEventAggregator events) : this(labelContent, labelFontSize, "", events) {}
-
-        public FolderSelectorViewModel(string labelContent, string textBoxContent, IEventAggregator events) : this(labelContent, 20, textBoxContent, events) {}
-
-        public FolderSelectorViewModel(string labelContent, double labelFontSize, string textBoxContent, IEventAggregator events) : 
-            this(labelContent, labelFontSize, textBoxContent, 20, events) { }
-
-        public FolderSelectorViewModel(string labelContent, double labelFontSize, string textBoxContent, double textBoxFontSize, IEventAggregator events) {
-            this.LabelContent = labelContent;
-            this.LabelFontSize = LabelFontSize;
-            this.TextBoxContent = TextBoxContent;
-            this.TextBoxFontSize = TextBoxFontSize;
+        public FolderSelectorViewModel(IEventAggregator events) {
             this._events = events;
+
         }
 
-
         public void Browse() {
-            
+            _events.PublishOnUIThread(new FolderSelectEvent(this));
         }
 
     }

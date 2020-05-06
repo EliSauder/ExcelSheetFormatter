@@ -33,7 +33,9 @@
                 Root Directory will contain both input and output. Both input and output can be empty if you desire.
         </TextBlock>
 
-        <ContentControl Grid.Row="3" Grid.Column="1" Name="FolderSelectorViewModel"/>
+        <ContentControl Grid.Row="3" Grid.Column="1" Name="RootDirectoryElement"/>
+        <ContentControl Grid.Row="5" Grid.Column="1" Name="InputFolderElement"/>
+        <ContentControl Grid.Row="7" Grid.Column="1" Name="OutputFolderElement"/>
 
         <!--<cu:FolderSelector Grid.Row="3" Grid.Column="1"  x:Name="RootElement"
                                LabelContent="Root Directory: " LabelFontSize="15"

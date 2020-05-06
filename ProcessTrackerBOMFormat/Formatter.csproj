@@ -170,6 +170,8 @@
     <Compile Include="Configuration\ConfigurationElementException.cs" />
     <Compile Include="Configuration\ConfigurationException.cs" />
     <Compile Include="Configuration\ConfigurationSectionFiles.cs" />
+    <Compile Include="Configuration\FormatterConfiguration.cs" />
+    <Compile Include="Configuration\IFormatterConfiguration.cs" />
     <Compile Include="Data\BomDataCell.cs" />
     <Compile Include="Data\BomDataColumn.cs">
       <SubType>Component</SubType>
@@ -191,6 +193,8 @@
     </Compile>
     <Compile Include="UserInterface\EventModels\FolderSelectEvent.cs" />
     <Compile Include="UserInterface\Interfaces\IPopUpContent.cs" />
+    <Compile Include="UserInterface\ViewModelFactories\PopUpViewModelFactory.cs" />
+    <Compile Include="UserInterface\ViewModelFactories\IFactory.cs" />
     <Compile Include="UserInterface\ViewModels\BomFormatCleanUpReportPopUpViewModel.cs" />
     <Compile Include="UserInterface\ViewModels\BomFormatDirectorySelectViewModel.cs" />
     <Compile Include="UserInterface\ViewModels\FolderSelectorViewModel.cs" />

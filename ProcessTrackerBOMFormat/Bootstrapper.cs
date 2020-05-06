@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using Formatter.Configuration;
+using Formatter.UserInterface.ViewModelFactories;
 using Formatter.UserInterface.ViewModels;
 using Formatter.Utility;
 using System;
@@ -27,8 +28,11 @@ namespace Formatter {
             _containter.Instance(_containter);
             _containter
                 .Singleton<IWindowManager, WindowManager>()
-                .Singleton<IEventAggregator, EventAggregator>()
-                .Singleton<Excel.Application, Excel.Application>();
+                .Singleton<IEventAggregator, EventAggregator>();
+
+            _containter
+                .PerRequest<IFormatterConfiguration, FormatterConfiguration>()
+                .PerRequest<IFactory<PopUpViewModel>, PopUpViewModelFactory>();
 
             GetType().Assembly.GetTypes()
                 .Where(type => type.IsClass)
@@ -41,8 +45,10 @@ namespace Formatter {
         protected override void OnStartup(object sender, StartupEventArgs e) {
 
             try {
-                ConfigurationSectionBoms bomConfigurations = (ConfigurationSectionBoms)ConfigurationManager.GetSection(Properties.Resources.BOM_CONFIGURATION_SECTION);
-                ConfigurationSectionFiles fileConfigurations = (ConfigurationSectionFiles)ConfigurationManager.GetSection(Properties.Resources.FILE_CONFIGURATION_SECTION);
+                IFormatterConfiguration configurations = _containter.GetInstance<IFormatterConfiguration>();
+
+                ConfigurationSectionBoms bomConfigurations = configurations.BomConfiguration;
+                ConfigurationSectionFiles fileConfigurations = configurations.FileConfiguration;
 
                 foreach (ConfigurationElementBom bom in bomConfigurations.BomCollection) {
                     foreach (ConfigurationElementColumn column in bom.ColumnCollection) {

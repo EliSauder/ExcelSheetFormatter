@@ -1,4 +1,6 @@
 ﻿using Caliburn.Micro;
+using Formatter.Configuration;
+using Formatter.UserInterface.EventModels;
 using Formatter.UserInterface.Interfaces;
 using Formatter.UserInterface.Models;
 using System.ComponentModel;
@@ -8,7 +10,10 @@ using System.Windows.Forms;
 
 namespace Formatter.UserInterface.ViewModels
 {
-    public class BomFormatDirectorySelectViewModel : Caliburn.Micro.Conductor<object>.Collection.AllActive, IPopUpContent {
+    public class BomFormatDirectorySelectViewModel : Caliburn.Micro.Conductor<object>.Collection.AllActive, IPopUpContent, IHandle<FolderSelectEvent> {
+
+        private const double TEXTBOX_FONT_SIZE = 15;
+        private const double LABEL_FONT_SIZE = 15;
 
         #region Interface Properties
         public string Title => "Select Directories";
@@ -65,21 +70,59 @@ namespace Formatter.UserInterface.ViewModels
         }
         #endregion
 
-        private FolderSelectorViewModel _rootDirectoryViewModel;
-        public FolderSelectorViewModel FolderSelectorViewModel {
-            get => _rootDirectoryViewModel;
+        private FolderSelectorViewModel _rootDirectoryElement;
+        public FolderSelectorViewModel RootDirectoryElement {
+            get => _rootDirectoryElement;
             set {
-                _rootDirectoryViewModel = value;
-                NotifyOfPropertyChange(() => FolderSelectorViewModel);
+                _rootDirectoryElement = value;
+                NotifyOfPropertyChange(() => RootDirectoryElement);
             }
         }
 
-        private IEventAggregator _events;
+        private FolderSelectorViewModel _inputFolderElement;
+        public FolderSelectorViewModel InputFolderElement {
+            get => _inputFolderElement;
+            set {
+                _inputFolderElement = value;
+                NotifyOfPropertyChange(() => InputFolderElement);
+            }
+        }
 
-        public BomFormatDirectorySelectViewModel(Configuration.ConfigurationSectionFiles fileConfig) {
-            RootDirectory = fileConfig.RootDirectory;
-            InputFolder = fileConfig.InputFolder;
-            OutputFolder = fileConfig.OutputFolder;
+        private FolderSelectorViewModel _outputFolderElement;
+        public FolderSelectorViewModel OutputFolderElement {
+            get => _outputFolderElement;
+            set {
+                _outputFolderElement = value;
+                NotifyOfPropertyChange(() => OutputFolderElement);
+            }
+        }
+
+        public BomFormatDirectorySelectViewModel(IFormatterConfiguration configurations, IEventAggregator events) {
+            RootDirectory = configurations.FileConfiguration.RootDirectory.Trim();
+            InputFolder = configurations.FileConfiguration.InputFolder.Trim();
+            OutputFolder = configurations.FileConfiguration.OutputFolder.Trim();
+
+            this.RootDirectoryElement = new FolderSelectorViewModel(events);
+            RootDirectoryElement.LabelContent = "Root Directory: ";
+            RootDirectoryElement.LabelFontSize = LABEL_FONT_SIZE;
+            RootDirectoryElement.TextBoxFontSize = TEXTBOX_FONT_SIZE;
+            RootDirectoryElement.TextBoxContent = RootDirectory;
+
+            this.InputFolderElement = new FolderSelectorViewModel(events);
+            InputFolderElement.LabelContent = "Input Folder: ";
+            InputFolderElement.LabelFontSize = LABEL_FONT_SIZE;
+            InputFolderElement.TextBoxFontSize = TEXTBOX_FONT_SIZE;
+            InputFolderElement.TextBoxContent = InputFolder;
+            InputFolderElement.RootFolder = RootDirectoryElement;
+
+            this.OutputFolderElement = new FolderSelectorViewModel(events);
+            OutputFolderElement.LabelContent = "Output Folder: ";
+            OutputFolderElement.LabelFontSize = LABEL_FONT_SIZE;
+            OutputFolderElement.TextBoxFontSize = TEXTBOX_FONT_SIZE;
+            OutputFolderElement.TextBoxContent = OutputFolder;
+            OutputFolderElement.RootFolder = RootDirectoryElement;
+
+            events.Subscribe(this);
         }
 
         #region Browse Event Handling
@@ -109,6 +152,15 @@ namespace Formatter.UserInterface.ViewModels
             dialog.ShowDialog();
 
             return dialog.SelectedPath;
+        }
+
+        public void Handle(FolderSelectEvent message) {
+            if (message.Sender.RootFolder != null && message.Sender.RootFolder.TextBoxContent.Length == 0) {
+                MessageBox.Show("No root directory selected. Please select root directory first.");
+            } else {
+                string value = browse(message.Sender.TextBoxContent);
+                message.Sender.TextBoxContent = value;
+            }
         }
         #endregion
 
