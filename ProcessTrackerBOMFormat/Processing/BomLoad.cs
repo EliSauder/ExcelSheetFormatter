@@ -6,32 +6,22 @@ using System.Data;
 
 namespace Formatter.Processing
 {
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'BomLoad'
     public class BomLoad
     {
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'BomLoad'
 
         private ConfigurationElementBom _bomConfig = null;
         private BomOutputType _outputType = BomOutputType.INDIVIDUAL;
         private BomInput _input = null;
         private BomOutput _output = null;
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'BomLoad.InputBom'
         public BomInput InputBom { get { return _input; } }
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'BomLoad.InputBom'
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'BomLoad.OutputBom'
         public BomOutput OutputBom { get { return _output; } }
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'BomLoad.OutputBom'
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'BomLoad.OutputType'
         public BomOutputType OutputType { get { return _outputType; } }
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'BomLoad.OutputType'
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'BomLoad.BomLoad(ConfigurationElementBom, BomOutputType, BomInput, BomOutput)'
-        public BomLoad(ConfigurationElementBom bomConfig, BomOutputType outputType, BomInput input, BomOutput output)
+        public BomLoad(ConfigurationElementBom bomConfig, BomInput input, BomOutput output)
         {
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'BomLoad.BomLoad(ConfigurationElementBom, BomOutputType, BomInput, BomOutput)'
             _bomConfig = bomConfig;
-            _outputType = outputType;
+            _outputType = bomConfig.OutputType;
             _input = input;
             _output = output;
 

@@ -1,8 +1,9 @@
 ﻿using Formatter.Utility;
+using System;
 using System.Configuration;
+using System.Xml;
 
-namespace Formatter.Configuration
-{
+namespace Formatter.Configuration {
 
     /// <summary>
     /// <para>Class <c>ConfigurationElementPopulation</c> defines a bom population event.</para>  
@@ -10,8 +11,20 @@ namespace Formatter.Configuration
     /// when a paticular input is found in one column.</para>
     /// </summary>
     /// <see cref="ConfigurationElement"/>
-    public class ConfigurationElementPopulation : ConfigurationElement
-    {
+    public class ConfigurationElementPopulation : ConfigurationElement {
+
+        public ConfigurationElementPopulation() { }
+
+        public ConfigurationElementPopulation(XmlNode node) {
+            foreach (XmlAttribute attribute in node.Attributes) {
+                if (Properties.Contains(attribute.Name))
+                    this[Properties[attribute.Name]] = Properties[attribute.Name].Converter.ConvertFrom(attribute.Value);
+            }
+            foreach (XmlNode childNode in node.ChildNodes) {
+                if (Properties.Contains(childNode.Name))
+                    this[childNode.Name] = Activator.CreateInstance(this[childNode.Name].GetType(), childNode);
+            }
+        }
 
         /// <value>Property <c>Name</c> is the name of the population as well as the key for the collection</value>
         /// <remarks>

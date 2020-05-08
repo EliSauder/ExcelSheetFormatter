@@ -1,8 +1,9 @@
 ﻿using Formatter.Utility;
+using System;
 using System.Configuration;
+using System.Xml;
 
-namespace Formatter.Configuration
-{
+namespace Formatter.Configuration {
 
     /// <summary>
     /// <para>Class <c>ConfigurationElementBom</c> defines a bom configuration element.</para>  
@@ -12,8 +13,7 @@ namespace Formatter.Configuration
     /// look for/replacesments that need to be made while formatting the bom.</para>
     /// </summary>
     /// <see cref="ConfigurationElement"/>
-    public class ConfigurationElementBom : ConfigurationElement
-    {
+    public class ConfigurationElementBom : ConfigurationElement {
 
         /// <value>
         /// Property <c>Name</c> defines the name of the bom. 
@@ -51,18 +51,14 @@ namespace Formatter.Configuration
         }
 
         [ConfigurationProperty("outputSheetName", DefaultValue = "")]
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationElementBom.OutputSheetName'
         public string OutputSheetName {
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationElementBom.OutputSheetName'
             get { return (string)this["outputSheetName"]; }
             set { this["outputSheetName"] = value; }
         }
 
         [ConfigurationProperty("inputFileExtention", IsRequired = true, DefaultValue = ".xlsx")]
         [RegexStringValidator(@"\.xlsx|\.csv|\.xls")]
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationElementBom.InputFileExtention'
         public string InputFileExtention {
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationElementBom.InputFileExtention'
             get { return (string)this["inputFileExtention"]; }
             set { this["inputFileExtention"] = value; }
         }
@@ -83,6 +79,19 @@ namespace Formatter.Configuration
         [ConfigurationProperty("fields", IsDefaultCollection = false)]
         public ConfigurationCollectionColumns ColumnCollection {
             get { return (ConfigurationCollectionColumns)base["fields"]; }
+        }
+
+        public ConfigurationElementBom() { }
+
+        public ConfigurationElementBom(XmlNode node) {
+            foreach (XmlAttribute attribute in node.Attributes) {
+                if (Properties.Contains(attribute.Name))
+                    this[this.Properties[attribute.Name]] = this.Properties[attribute.Name].Converter.ConvertFrom(attribute.Value);
+            }
+            foreach (XmlNode childNode in node.ChildNodes) {
+                if (Properties.Contains(childNode.Name))
+                    this[childNode.Name] = Activator.CreateInstance(this[childNode.Name].GetType(), childNode);
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 
@@ -16,9 +17,10 @@ namespace Formatter.UserInterface.ViewModels {
         private Collection<TreeViewItem> _inputNodes = null;
         private List<TreeViewItem> _rootNodes = null;
 
+        public string ProcessButtonText => "Continue";
         public double? StartingWidth => 600;
         public double? StartingHeight => 400;
-        public string Title { get; } = "Cleanup Results";
+        public string Title => "Cleanup Results";
 
         public List<TreeViewItem> RootNodes {
             get => _rootNodes;
@@ -27,6 +29,10 @@ namespace Formatter.UserInterface.ViewModels {
                 NotifyOfPropertyChange(() => RootNodes);
             }
         }
+
+        public Exception Error => null;
+
+        public bool HasError => false;
 
         public BomFormatCleanUpReportPopUpViewModel(Collection<TreeViewItem> items) {
 
@@ -45,10 +51,17 @@ namespace Formatter.UserInterface.ViewModels {
             RootNodes = nodes;
         }
 
-        DialogResult IPopUpContent.Exit() => DialogResult.OK;
+        public MessageBoxResult OnExit() => MessageBoxResult.OK;
 
-        public bool CanExit() => true;
+        public bool CanExit => true;
 
-        public void IsError() {}
+        public MessageBoxResult OnProcess() => OnExit();
+
+        public bool CanProcess => CanExit;
+
+        public void ExitError() {
+            //No implementation needed
+        }
+        public void ProcessError() => ExitError();
     }
 }

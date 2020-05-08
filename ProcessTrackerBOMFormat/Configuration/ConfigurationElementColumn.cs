@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Configuration;
+using System.Xml;
 
-namespace Formatter.Configuration
-{
+namespace Formatter.Configuration {
 
     /// <summary>
     /// <para>Class <c>ConfigurationElementColumn</c> defines a bom column element.</para>  
@@ -11,8 +11,20 @@ namespace Formatter.Configuration
     /// file and decide what actions to perform on each column.</para>
     /// </summary>
     /// <see cref="ConfigurationElement"/>
-    public class ConfigurationElementColumn : ConfigurationElement
-    {
+    public class ConfigurationElementColumn : ConfigurationElement {
+
+        public ConfigurationElementColumn() { }
+
+        public ConfigurationElementColumn(XmlNode node) {
+            foreach (XmlAttribute attribute in node.Attributes) {
+                if (Properties.Contains(attribute.Name))
+                    this[Properties[attribute.Name]] = Properties[attribute.Name].Converter.ConvertFrom(attribute.Value);
+            }
+            foreach (XmlNode childNode in node.ChildNodes) {
+                if (Properties.Contains(childNode.Name))
+                    this[childNode.Name] = Activator.CreateInstance(this[childNode.Name].GetType(), childNode);
+            }
+        }
 
         /// <value>Property <c>Name</c> defines the name of the column and is the key for the collection</value>
         /// <remarks>
@@ -30,9 +42,7 @@ namespace Formatter.Configuration
         }
 
         [ConfigurationProperty("identifierOrder", IsRequired = false, DefaultValue = -1)]
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationElementColumn.IdentifierOrder'
         public int IdentifierOrder {
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationElementColumn.IdentifierOrder'
             get { return (int)this["identifierOrder"]; }
             set { this["identifierOrder"] = value; }
         }
@@ -155,9 +165,7 @@ namespace Formatter.Configuration
         }
 
         [ConfigurationProperty("cleanupActions", IsDefaultCollection = false)]
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationElementColumn.CleanupCollection'
         public ConfigurationCollectionCleanUp CleanupCollection {
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationElementColumn.CleanupCollection'
             get { return (ConfigurationCollectionCleanUp)base["cleanupActions"]; }
             set { base["cleanupActions"] = value; }
         }

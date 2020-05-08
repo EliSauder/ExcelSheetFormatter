@@ -6,37 +6,25 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Windows.Controls;
 
-namespace Formatter.Processing
-{
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'BomCleanup'
-    public class BomCleanup
-    {
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'BomCleanup'
+namespace Formatter.Processing {
+    public class BomCleanup {
 
         private CleanupItemCollection _cleanups = new CleanupItemCollection();
 
         private Collection<ConfigurationElementColumn> _columnsWithCleanup = new Collection<ConfigurationElementColumn>();
-#pragma warning disable CS0612 // 'DuplicateKeyComparer<int>' is obsolete
         private SortedList<int, ConfigurationElementColumn> _columnsForIdentifier = new SortedList<int, ConfigurationElementColumn>(new DuplicateKeyComparer<int>());
-#pragma warning restore CS0612 // 'DuplicateKeyComparer<int>' is obsolete
 
         private BomPopulations _populatedOutput = null;
-        private ConfigurationCollectionColumns _configCollection = null;
+        private ConfigurationElementBom _bomConfig = null;
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'BomCleanup.BomCleanup(ConfigurationCollectionColumns, BomPopulations)'
-        public BomCleanup(ConfigurationCollectionColumns configColumns, BomPopulations populatedOutput)
-        {
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'BomCleanup.BomCleanup(ConfigurationCollectionColumns, BomPopulations)'
+        public BomCleanup(ConfigurationElementBom bomConfig, BomPopulations populatedOutput) {
             _populatedOutput = populatedOutput;
-            _configCollection = configColumns;
+            _bomConfig = bomConfig;
 
-            foreach (ConfigurationElementColumn evaluateColumn in _configCollection)
-            {
+            foreach (ConfigurationElementColumn evaluateColumn in _bomConfig.ColumnCollection) {
                 ConfigurationElementColumn value = null;
-                foreach (BomDataColumn checkColumn in populatedOutput.PopulatedDataTable.Columns)
-                {
-                    if (evaluateColumn.Order == checkColumn.Ordinal && !checkColumn.ColumnName.Equals(evaluateColumn.Name))
-                    {
+                foreach (BomDataColumn checkColumn in populatedOutput.PopulatedDataTable.Columns) {
+                    if (evaluateColumn.Order == checkColumn.Ordinal && !checkColumn.ColumnName.Equals(evaluateColumn.Name)) {
                         value = new ConfigurationElementColumn();
                         value.Name = checkColumn.ColumnName;
                         value.Order = evaluateColumn.Order;
@@ -56,8 +44,7 @@ namespace Formatter.Processing
                     }
                 }
 
-                if (value == null)
-                {
+                if (value == null) {
                     value = evaluateColumn;
                 }
 
@@ -68,52 +55,37 @@ namespace Formatter.Processing
             PerformCleanup();
         }
 
-        private void PerformCleanup()
-        {
-            for (int i = _populatedOutput.PopulatedDataTable.Rows.Count - 1; i >= 0; i--)
-            {
+        private void PerformCleanup() {
+            for (int i = _populatedOutput.PopulatedDataTable.Rows.Count - 1; i >= 0; i--) {
                 //foreach (DataRow row in _populatedOutput.PopulatedDataTable.Rows) {
                 DataRow row = _populatedOutput.PopulatedDataTable.Rows[i];
 
-                foreach (ConfigurationElementColumn column in _columnsWithCleanup)
-                {
+                foreach (ConfigurationElementColumn column in _columnsWithCleanup) {
                     object cell = row[column.Name];
                     string cellVal = cell.ToString();
                     object originalCell = cell;
 
-                    foreach (ConfigurationElementCleanUp cleanup in column.CleanupCollection)
-                    {
-                        if (cleanup.Active && StringEvaluation.eval(cleanup.Condition, cellVal, cleanup.Value))
-                        {
+                    foreach (ConfigurationElementCleanUp cleanup in column.CleanupCollection) {
+                        if (cleanup.Active && StringEvaluation.eval(cleanup.Condition, cellVal, cleanup.Value)) {
                             CleanupItem cleanupItem;
 
                             ConfigurationCleanupActions.CleanupActionType actionType = ConfigurationCleanupActions.GetCleanUpActionType(cleanup.Action);
 
                             string[] identifiers = GetRowIdentifier(row);
 
-                            if (actionType == ConfigurationCleanupActions.CleanupActionType.REMOVAL)
-                            {
+                            if (actionType == ConfigurationCleanupActions.CleanupActionType.REMOVAL) {
                                 cleanupItem = new CleanupItemRemove(cleanup.Action, cleanup.Scope, cleanup.Condition, identifiers, column.Name, cellVal, cleanup.Report);
-                            }
-                            else if (actionType == ConfigurationCleanupActions.CleanupActionType.MODIFICATION)
-                            {
+                            } else if (actionType == ConfigurationCleanupActions.CleanupActionType.MODIFICATION) {
                                 cleanupItem = new CleanupItemUpdate(cleanup.Action, cleanup.Scope, cleanup.Condition, originalCell.ToString(), cellVal, identifiers, cleanup.Report);
-                            }
-                            else if (actionType == ConfigurationCleanupActions.CleanupActionType.STATS)
-                            {
+                            } else if (actionType == ConfigurationCleanupActions.CleanupActionType.STATS) {
                                 cleanupItem = new CleanupItem(cleanup.Action, cleanup.Scope, cleanup.Condition, "Value = " + cellVal, identifiers, cleanup.Report);
-                            }
-                            else
-                            {
+                            } else {
                                 cleanupItem = new CleanupItem(cleanup.Action, cleanup.Scope, cleanup.Condition, "Unknown Cleanup, no cleanup performed", identifiers, cleanup.Report);
                             }
 
-                            if (cleanup.Scope == ConfigurationCleanupActions.CleanupScope.ROW)
-                            {
+                            if (cleanup.Scope == ConfigurationCleanupActions.CleanupScope.ROW) {
                                 ConfigurationCleanupActions.PerformCleanupAction(cleanup.Action, row);
-                            }
-                            else
-                            {
+                            } else {
                                 row[column.Name] = ConfigurationCleanupActions.PerformCleanupAction(cleanup.Action, cell, column.DataType);
                             }
 
@@ -126,48 +98,37 @@ namespace Formatter.Processing
             _populatedOutput.PopulatedDataTable.AcceptChanges();
         }
 
-        private TreeViewItem GetSubItem(TreeViewItem item, string header)
-        {
-            foreach (TreeViewItem subItem in item.Items)
-            {
+        private TreeViewItem GetSubItem(TreeViewItem item, string header) {
+            foreach (TreeViewItem subItem in item.Items) {
                 if (header.Equals(subItem.Header)) return subItem;
             }
             return null;
         }
 
-        private TreeViewItem GetSubItem(Collection<TreeViewItem> items, string header)
-        {
-            foreach (TreeViewItem subItem in items)
-            {
+        private TreeViewItem GetSubItem(Collection<TreeViewItem> items, string header) {
+            foreach (TreeViewItem subItem in items) {
                 if (header.Equals(subItem.Header)) return subItem;
             }
             return null;
         }
 
-        private TreeViewItem CreateTreeViewItem(string header, bool expanded)
-        {
+        private TreeViewItem CreateTreeViewItem(string header, bool expanded) {
             return new TreeViewItem() { Header = header, IsExpanded = expanded };
         }
 
-        private void AddTreeViewSubItem(TreeViewItem item, TreeViewItem subItem)
-        {
+        private void AddTreeViewSubItem(TreeViewItem item, TreeViewItem subItem) {
             if (subItem.Parent == null) item.Items.Add(subItem);
         }
 
-        private void AddTreeViewSubItem(Collection<TreeViewItem> items, TreeViewItem subItem)
-        {
+        private void AddTreeViewSubItem(Collection<TreeViewItem> items, TreeViewItem subItem) {
             if (items.IndexOf(subItem) == -1) items.Add(subItem);
         }
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'BomCleanup.OutputResults()'
-        public Collection<TreeViewItem> OutputResults()
-        {
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'BomCleanup.OutputResults()'
+        public Collection<TreeViewItem> OutputResults() {
 
             Collection<TreeViewItem> treeViewItems = new Collection<TreeViewItem>();
 
-            foreach (CleanupItem cleanupItem in _cleanups)
-            {
+            foreach (CleanupItem cleanupItem in _cleanups) {
 
                 string header = "Action: " + cleanupItem.Action.ToString();
 
@@ -195,23 +156,19 @@ namespace Formatter.Processing
 
                 TreeViewItem treeItemForPreviousValue = null;
 
-                for (int i = 0; i < cleanupItem.Categories.Length; i++)
-                {
+                for (int i = 0; i < cleanupItem.Categories.Length; i++) {
                     string value = cleanupItem.Categories[i];
                     bool expand = i == cleanupItem.Categories.Length - 1 ? false : true;
                     TreeViewItem treeItemForValue = null;
 
-                    if (treeItemForPreviousValue == null)
-                    {
+                    if (treeItemForPreviousValue == null) {
                         treeItemForValue =
                             GetSubItem(treeItemForPreMessage, value) ??
                             CreateTreeViewItem(value, expand);
 
                         AddTreeViewSubItem(treeItemForPreMessage, treeItemForValue);
 
-                    }
-                    else
-                    {
+                    } else {
                         treeItemForValue =
                             GetSubItem(treeItemForPreviousValue, value) ??
                             CreateTreeViewItem(value, expand);
@@ -222,8 +179,7 @@ namespace Formatter.Processing
                     treeItemForPreviousValue = treeItemForValue;
                 }
 
-                if (cleanupItem.Message.Length != 0)
-                {
+                if (cleanupItem.Message.Length != 0) {
                     TreeViewItem treeItemForPostMessage =
                                 GetSubItem(treeItemForPreviousValue, cleanupItem.Message) ??
                                 CreateTreeViewItem(cleanupItem.Message, false);
@@ -235,23 +191,18 @@ namespace Formatter.Processing
             return treeViewItems;
         }
 
-        private string[] GetRowIdentifier(DataRow row)
-        {
+        private string[] GetRowIdentifier(DataRow row) {
 
             Collection<string> identifiers = new Collection<string>();
 
             ConfigurationElementColumn previousColumn = null;
 
-            foreach (KeyValuePair<int, ConfigurationElementColumn> column in _columnsForIdentifier)
-            {
+            foreach (KeyValuePair<int, ConfigurationElementColumn> column in _columnsForIdentifier) {
 
-                if (previousColumn != null && previousColumn.IdentifierOrder == column.Value.IdentifierOrder)
-                {
+                if (previousColumn != null && previousColumn.IdentifierOrder == column.Value.IdentifierOrder) {
                     string delimiter = identifiers[identifiers.Count - 1].Trim().Length == 0 ? "" : " - ";
                     identifiers[identifiers.Count - 1] = row[column.Value.Name].ToString() + delimiter + identifiers[identifiers.Count - 1];
-                }
-                else
-                {
+                } else {
                     string value = row[column.Value.Name].ToString();
                     identifiers.Add(value);
                 }
@@ -259,8 +210,7 @@ namespace Formatter.Processing
                 previousColumn = column.Value;
             }
 
-            for (int i = 0; i < identifiers.Count; i++)
-            {
+            for (int i = 0; i < identifiers.Count; i++) {
                 string value = identifiers[i];
                 if (value.Replace("-", "").Trim().Length == 0) identifiers[i] = "(BLANK)";
             }

@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Formatter.Configuration;
 using Formatter.UserInterface.Models;
 using Formatter.UserInterface.ViewModels;
@@ -11,44 +12,31 @@ using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 
 namespace Formatter.Processing {
     public class BomFormat {
 
-        private ProductNumberModel productNumber = null;
-        private ConfigurationSectionFiles fileConfigurations = null;
-        private ConfigurationElementBom bomConfiguration = null;
+        private IFormatterConfiguration _formatterConfiguration;
+        private string _selectedBom;
+        private ProductNumberModel _productNumberModel;
 
-        private string inputFolder = "";
-        private string inputExtention = "";
-
-        private BomOutputType bomOutputType;
-
-        public BomFormat(ProductNumberModel productNumber, ConfigurationSectionFiles fileConfigurations, ConfigurationElementBom bomConfiguration, BomOutputType bomOutputType) {
-            this.productNumber = productNumber;
-            this.fileConfigurations = fileConfigurations;
-            this.bomConfiguration = bomConfiguration;
-
-            this.inputFolder = fileConfigurations.RootDirectory + fileConfigurations.InputFolder;
-            this.inputExtention = bomConfiguration.InputFileExtention;
-
-            this.bomOutputType = bomOutputType;
+        public BomFormat(IFormatterConfiguration formatterConfiguration, string selectedBom, ProductNumberModel productNumber) {
+            this._formatterConfiguration = formatterConfiguration;
+            this._selectedBom = selectedBom;
+            this._productNumberModel = productNumber;
         }
 
         public void FormatBom() {
+            string outputFilePath = Path.Combine(_formatterConfiguration.OutputFolderPath, _productNumberModel.ProductNumber + "-output");
+            outputFilePath = Path.GetFullPath(Path.ChangeExtension(outputFilePath, Properties.Resources.OUTPUTFILE_EXTENTION));
 
-            StringBuilder outputFileName = new StringBuilder();
-
-            outputFileName.Append(fileConfigurations.RootDirectory)
-                .Append(fileConfigurations.OutputFolder)
-                .Append(productNumber.ProductNumber)
-                .Append("-output")
-                .Append(Properties.Resources.OUTPUTFILE_EXTENTION);
+            if (!File.Exists(outputFilePath)) throw new FileNotFoundException("File not found: " + outputFilePath + "\nMake sure the directory configurations are correct and that the files are named correctly and located in the right directory.");
 
             try {
-                File.OpenWrite(outputFileName.ToString()).Close();
+                File.OpenWrite(outputFilePath).Close();
             } catch (Exception) {
-                throw new FileNotFoundException("Unable to open file: " + outputFileName.ToString() + "\nCheck to see if you have it open.");
+                throw new FileNotFoundException("Unable to open file: " + outputFilePath + "\nCheck to see if you have it open.");
             }
 
             Stopwatch s = new Stopwatch();
@@ -64,11 +52,13 @@ namespace Formatter.Processing {
 
             Bootstrapper.ClearOpenWorkbooks();
 
-            BomInput bomInput = new BomInput(productNumber, inputFolder, inputExtention);
-            BomOutput bomOutput = new BomOutput(Bootstrapper.GetExcelInstance(), bomInput, bomConfiguration, fileConfigurations);
-            new BomLoad(bomConfiguration, bomOutputType, bomInput, bomOutput);
-            BomPopulations bomPopulations = new BomPopulations(bomOutput, bomConfiguration.ColumnCollection);
-            BomCleanup bomCleanup = new BomCleanup(bomConfiguration.ColumnCollection, bomPopulations);
+            ConfigurationElementBom selectedBomConfig = _formatterConfiguration.BomConfiguration.BomCollection[_selectedBom];
+
+            BomInput bomInput = new BomInput(_productNumberModel, _formatterConfiguration.InputFolderPath, selectedBomConfig.InputFileExtention);
+            BomOutput bomOutput = new BomOutput(Bootstrapper.GetExcelInstance(), bomInput, selectedBomConfig, _formatterConfiguration);
+            new BomLoad(selectedBomConfig, bomInput, bomOutput);
+            BomPopulations bomPopulations = new BomPopulations(bomOutput, selectedBomConfig);
+            BomCleanup bomCleanup = new BomCleanup(selectedBomConfig, bomPopulations);
 
             bomOutput.CopyDataToExcel();
 

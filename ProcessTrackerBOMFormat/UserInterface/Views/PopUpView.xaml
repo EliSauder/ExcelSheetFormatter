@@ -49,8 +49,8 @@
             
             <ContentControl Grid.Row="1" Grid.Column="1" x:Name="ActiveItem"/>
 
-            <Button x:Name="Continue"
-                    cal:Message.Attach="[Event Click] = [Action Exit]"
+            <Button x:Name="Process"
+                    cal:Message.Attach="[Event Click] = [Action Process]"
                     Margin="0 10 0 0" 
                     HorizontalAlignment="Right" 
                     VerticalAlignment="Bottom" 
@@ -61,8 +61,7 @@
                     Background="#1584cd"
                     Foreground="#f8f8f8"
                     FontSize="15" 
-                    TextBlock.TextAlignment="Center">
-                Continue
+                    TextBlock.TextAlignment="Center" Content="{Binding Path=ProcessButtonText}">
                 <Button.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius" Value="3"/>

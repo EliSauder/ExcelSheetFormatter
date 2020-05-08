@@ -1,7 +1,8 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using System.Xml;
 
-namespace Formatter.Configuration
-{
+namespace Formatter.Configuration {
 
     /// <summary>
     /// Class <c>ConfigurationCollectionPopulations</c> defines a 
@@ -9,8 +10,25 @@ namespace Formatter.Configuration
     /// that defines a collection of bom field populations.
     /// </summary>
     /// <see cref="ConfigurationElementCollection"/>
-    public class ConfigurationCollectionPopulations : ConfigurationElementCollection
-    {
+    public class ConfigurationCollectionPopulations : ConfigurationElementCollection {
+
+        public ConfigurationCollectionPopulations() {
+            ConfigurationElementPopulation bom = (ConfigurationElementPopulation)CreateNewElement();
+            if (!bom.Name.Equals("")) {
+                BaseAdd(bom);
+            }
+        }
+
+        public ConfigurationCollectionPopulations(XmlNode node) {
+            foreach (XmlAttribute attribute in node.Attributes) {
+                if (Properties.Contains(attribute.Name))
+                    this[this.Properties[attribute.Name]] = this.Properties[attribute.Name].Converter.ConvertFrom(attribute.Value);
+            }
+            foreach (XmlNode childNode in node.ChildNodes) {
+                ConfigurationElementPopulation bom = (ConfigurationElementPopulation)Activator.CreateInstance(typeof(ConfigurationElementPopulation), childNode);
+                if (bom.Name.Length != 0) this.BaseAdd(bom);
+            }
+        }
 
         /// <value>Property <c>CollectionType</c> Represents the type of the current collection.</value>
         public override ConfigurationElementCollectionType CollectionType {
@@ -22,8 +40,7 @@ namespace Formatter.Configuration
         /// </summary>
         /// <remarks>It will create the element as a <c>ConfigurationElementPopulation</c></remarks>
         /// <returns>A new configuration element of type ConfigurationElementPopulation</returns>
-        protected override ConfigurationElement CreateNewElement()
-        {
+        protected override ConfigurationElement CreateNewElement() {
             return new ConfigurationElementPopulation();
         }
 
@@ -32,14 +49,11 @@ namespace Formatter.Configuration
         /// </summary>
         /// <param name="element">The elment that you want the key of.</param>
         /// <returns>The key of the element.</returns>
-        protected override object GetElementKey(ConfigurationElement element)
-        {
+        protected override object GetElementKey(ConfigurationElement element) {
             return ((ConfigurationElementPopulation)element).Name;
         }
 
 
-#pragma warning disable CS1584 // XML comment has syntactically incorrect cref attribute '[]'
-#pragma warning disable CS1658 // Identifier expected. See also error CS1001.
         /// <summary>
         /// Gets the element at the index specified.
         /// </summary>
@@ -47,8 +61,6 @@ namespace Formatter.Configuration
         /// <seealso cref="[]"/>
         /// <returns>The bom configuration element from the index specified.</returns>
         public ConfigurationElementPopulation this[int index] {
-#pragma warning restore CS1658 // Identifier expected. See also error CS1001.
-#pragma warning restore CS1584 // XML comment has syntactically incorrect cref attribute '[]'
             get { return (ConfigurationElementPopulation)BaseGet(index); }
             set {
                 if (BaseGet(index) != null) BaseRemoveAt(index);
@@ -70,8 +82,7 @@ namespace Formatter.Configuration
         /// </summary>
         /// <param name="field">The element you wish to find the index of.</param>
         /// <returns>The index of the element.</returns>
-        public int IndexOf(ConfigurationElementPopulation field)
-        {
+        public int IndexOf(ConfigurationElementPopulation field) {
             return BaseIndexOf(field);
         }
 
@@ -80,11 +91,9 @@ namespace Formatter.Configuration
         /// </summary>
         /// <param name="name">the key you want the index of</param>
         /// <returns>The index of the element</returns>
-        public int IndexOf(string name)
-        {
+        public int IndexOf(string name) {
             name = name.ToLower();
-            for (int idx = 0; idx < base.Count; idx++)
-            {
+            for (int idx = 0; idx < base.Count; idx++) {
                 if (this[idx].Name.ToLower() == name) return idx;
             }
             return -1;

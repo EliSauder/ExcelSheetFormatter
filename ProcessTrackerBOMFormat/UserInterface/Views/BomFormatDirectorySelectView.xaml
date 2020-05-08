@@ -20,22 +20,25 @@
             <RowDefinition Height="20"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="20" TextWrapping="Wrap">
-                Please define the directories that the application should look for files and output files.
-                Root Directory will contain both input and output. Both input and output can be empty if you desire.
+        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="18" TextWrapping="Wrap">
+                Define the directories where the application will perform file actions below. <LineBreak/>
+                - The root directory will contain all files.<LineBreak/>
+                - The input and output folders allow for defining folders specifically for only input and output files.
         </TextBlock>
 
         <ContentControl Grid.Row="3" Grid.Column="1" Name="RootDirectoryElement"/>
         <ContentControl Grid.Row="5" Grid.Column="1" Name="InputFolderElement"/>
         <ContentControl Grid.Row="7" Grid.Column="1" Name="OutputFolderElement"/>
+
+        <TextBlock VerticalAlignment="Bottom" Margin="10 30 0 0" FontSize="13" FontStyle="Italic"  Grid.Row="8" Grid.ColumnSpan="3">* indicates an optional field</TextBlock>
 
         <!--<cu:FolderSelector Grid.Row="3" Grid.Column="1"  x:Name="RootElement"
                                LabelContent="Root Directory: " LabelFontSize="15"

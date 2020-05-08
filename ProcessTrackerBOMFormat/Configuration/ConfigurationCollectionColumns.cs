@@ -1,7 +1,11 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Xml;
 
-namespace Formatter.Configuration
-{
+namespace Formatter.Configuration {
 
     /// <summary>
     /// Class <c>ConfigurationCollectionColumns</c> defines a 
@@ -9,8 +13,20 @@ namespace Formatter.Configuration
     /// that defines a collection of BOM columns.
     /// </summary>
     /// <see cref="ConfigurationElementCollection"/>
-    public class ConfigurationCollectionColumns : ConfigurationElementCollection
-    {
+    public class ConfigurationCollectionColumns : ConfigurationElementCollection, ICollection<ConfigurationElementColumn>, IEnumerator<ConfigurationElementColumn> {
+
+        public ConfigurationCollectionColumns() { }
+
+        public ConfigurationCollectionColumns(XmlNode node) {
+            foreach (XmlAttribute attribute in node.Attributes) {
+                if (Properties.Contains(attribute.Name))
+                    this[this.Properties[attribute.Name]] = this.Properties[attribute.Name].Converter.ConvertFrom(attribute.Value);
+            }
+            foreach (XmlNode childNode in node.ChildNodes) {
+                ConfigurationElementColumn bom = (ConfigurationElementColumn)Activator.CreateInstance(typeof(ConfigurationElementColumn), childNode);
+                if (bom.Name.Length != 0) this.BaseAdd(bom);
+            }
+        }
 
         /// <value>Property <c>CollectionType</c> Represents the type of the current collection.</value>
         public override ConfigurationElementCollectionType CollectionType {
@@ -22,8 +38,7 @@ namespace Formatter.Configuration
         /// </summary>
         /// <remarks>It will create the element as a <c>ConfigurationElementColumn</c></remarks>
         /// <returns>A new configuration element of type ConfigurationElementColumn</returns>
-        protected override ConfigurationElement CreateNewElement()
-        {
+        protected override ConfigurationElement CreateNewElement() {
             return new ConfigurationElementColumn();
         }
 
@@ -32,14 +47,10 @@ namespace Formatter.Configuration
         /// </summary>
         /// <param name="element">The elment that you want the key of.</param>
         /// <returns>The key of the element.</returns>
-        protected override object GetElementKey(ConfigurationElement element)
-        {
+        protected override object GetElementKey(ConfigurationElement element) {
             return ((ConfigurationElementColumn)element).Name;
         }
 
-
-#pragma warning disable CS1658 // Identifier expected. See also error CS1001.
-#pragma warning disable CS1584 // XML comment has syntactically incorrect cref attribute '[]'
         /// <summary>
         /// Gets the element at the index specified.
         /// </summary>
@@ -47,8 +58,6 @@ namespace Formatter.Configuration
         /// <seealso cref="[]"/>
         /// <returns>The bom column element from the index specified.</returns>
         public ConfigurationElementColumn this[int index] {
-#pragma warning restore CS1584 // XML comment has syntactically incorrect cref attribute '[]'
-#pragma warning restore CS1658 // Identifier expected. See also error CS1001.
             get { return (ConfigurationElementColumn)BaseGet(index); }
             set {
                 if (BaseGet(index) != null) BaseRemoveAt(index);
@@ -70,8 +79,7 @@ namespace Formatter.Configuration
         /// </summary>
         /// <param name="field">The element you wish to find the index of.</param>
         /// <returns>The index of the element.</returns>
-        public int IndexOf(ConfigurationElementColumn field)
-        {
+        public int IndexOf(ConfigurationElementColumn field) {
             return BaseIndexOf(field);
         }
 
@@ -80,14 +88,47 @@ namespace Formatter.Configuration
         /// </summary>
         /// <param name="name">the key you want the index of</param>
         /// <returns>The index of the element</returns>
-        public int IndexOf(string name)
-        {
+        public int IndexOf(string name) {
             name = name.ToLower();
-            for (int idx = 0; idx < base.Count; idx++)
-            {
+            for (int idx = 0; idx < base.Count; idx++) {
                 if (this[idx].Name.ToLower() == name) return idx;
             }
             return -1;
+        }
+
+        public void Add(ConfigurationElementColumn item) => BaseAdd(item);
+
+        public void Clear() => BaseClear();
+
+        public bool Contains(ConfigurationElementColumn item) => IndexOf(item) != -1;
+
+        public void CopyTo(ConfigurationElementColumn[] array, int arrayIndex) {
+            for (int i = 0; i < this.Count; i++) 
+                array[i + arrayIndex] = this[i];
+        }
+
+        public bool Remove(ConfigurationElementColumn item) {
+            if (Contains(item)) {
+                BaseRemove(item);
+                return true;
+            }
+            return false;
+        }
+
+        IEnumerator<ConfigurationElementColumn> IEnumerable<ConfigurationElementColumn>.GetEnumerator() {
+            return this;
+        }
+
+        public void Dispose() { }
+
+        public bool MoveNext() {
+            if (_currentElement + 1 > this.Count - 1) return false;
+            _currentElement++;
+            return true;
+        }
+
+        public void Reset() {
+            _currentElement = 0;
         }
 
         /// <summary>
@@ -104,5 +145,13 @@ namespace Formatter.Configuration
         protected override string ElementName {
             get { return "field"; }
         }
+
+        private int _currentElement = 0;
+
+        bool ICollection<ConfigurationElementColumn>.IsReadOnly => false;
+
+        public ConfigurationElementColumn Current => this[_currentElement];
+
+        object IEnumerator.Current => Current;
     }
 }

@@ -41,7 +41,16 @@ namespace Formatter.UserInterface.ViewModels {
             }
         }
 
-        public DialogResult DialogResult { get; private set; }
+        private string _processButtonText = "";
+        public string ProcessButtonText {
+            get => _processButtonText;
+            set {
+                _processButtonText = value;
+                NotifyOfPropertyChange(() => ProcessButtonText);
+            }
+        }
+
+        public MessageBoxResult MessageBoxResult { get; private set; }
 
         public PopUpViewModel(IPopUpContent conductor) : this(conductor, conductor.Title) { }
 
@@ -50,6 +59,7 @@ namespace Formatter.UserInterface.ViewModels {
             this.DisplayName = title;
             this.WindowHeight = conductor.StartingHeight ?? WindowHeight;
             this.WindowWidth = conductor.StartingWidth ?? WindowWidth;
+            ProcessButtonText = conductor.ProcessButtonText;
         }
 
         public void Minimize() {
@@ -61,10 +71,20 @@ namespace Formatter.UserInterface.ViewModels {
         }
 
         public void Exit() {
-            if (!this.ActiveItem.CanExit()) this.ActiveItem.IsError();
-            else {
-                this.DialogResult = this.ActiveItem.Exit();
+            if (this.ActiveItem.CanExit) {
+                this.MessageBoxResult = this.ActiveItem.OnExit();
                 this.TryClose();
+            } else if (this.ActiveItem.HasError) {
+                this.ActiveItem.ExitError();
+            }
+        }
+
+        public void Process() {
+            if (this.ActiveItem.CanProcess) {
+                this.MessageBoxResult = this.ActiveItem.OnProcess();
+                this.TryClose();
+            } else if (this.ActiveItem.HasError) {
+                this.ActiveItem.ProcessError();
             }
         }
     }

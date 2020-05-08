@@ -61,6 +61,15 @@ namespace Formatter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to applicationConfiguration.
+        /// </summary>
+        internal static string APPLICATION_CONFIGURATION_SECTION {
+            get {
+                return ResourceManager.GetString("APPLICATION_CONFIGURATION_SECTION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to applicationConfiguration/boms.
         /// </summary>
         internal static string BOM_CONFIGURATION_SECTION {

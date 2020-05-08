@@ -1,23 +1,125 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Formatter.Configuration {
     public class FormatterConfiguration : IFormatterConfiguration {
+
+        public XmlDocument XmlDocument = null;
+        public ConfigurationSectionBoms BomConfiguration { get; private set; } = null;
+        public ConfigurationSectionFiles FileConfiguration { get; private set; } = null;
+        public string InputFolderPath => Path.Combine(FileConfiguration.RootDirectory, FileConfiguration.InputFolder);
+        public string OutputFolderPath => Path.Combine(FileConfiguration.RootDirectory, FileConfiguration.OutputFolder);
+        public Exception Error { get; private set; } = null;
+        public bool HasError => Error != null;
+
+        public string ConfigurationFilePath {
+            get {
+                string configFile = ConfigurationManager.AppSettings["configFileLocation"];
+
+                configFile = Environment.ExpandEnvironmentVariables(configFile);
+                configFile = Regex.Replace(configFile, "%PRGMNAME%", Assembly.GetExecutingAssembly().GetName().Name, RegexOptions.IgnoreCase); //configFile.Replace("%ASSEMBLY%", Assembly.GetExecutingAssembly().GetName().Name);
+
+                return Path.GetFullPath(configFile);
+            }
+        }
+        public bool ConfigurationExists => File.Exists(ConfigurationFilePath);
+
         public FormatterConfiguration() {
-            BomConfiguration = (ConfigurationSectionBoms)ConfigurationManager.GetSection(Properties.Resources.BOM_CONFIGURATION_SECTION);
-            FileConfiguration = (ConfigurationSectionFiles)ConfigurationManager.GetSection(Properties.Resources.FILE_CONFIGURATION_SECTION);
+            try {
+                LoadConfiguration();
+            } catch(XmlException e) {
+                Error = e;
+            }
         }
 
-        public ConfigurationSectionBoms BomConfiguration { get; }
+        public ConfigurationElementBom GetBomConfig(string bomName) => BomConfiguration.BomCollection[bomName];
 
-        public ConfigurationSectionFiles FileConfiguration { get; }
+        private void LoadConfiguration() {
+            if (!ConfigurationExists) return;
+            XmlDocument = new XmlDocument();
+            try {
+                XmlDocument.Load(ConfigurationFilePath);
+            } catch (Exception e) {
+                throw new XmlException("Error in configuration file: " + e.Message, e);
+            }
+            XmlNode node = XmlDocument.SelectSingleNode(Properties.Resources.APPLICATION_CONFIGURATION_SECTION);
+            this.BomConfiguration = new ConfigurationSectionBoms(node);
+            this.FileConfiguration = new ConfigurationSectionFiles(node);
+        }
 
-        public ConfigurationElementBom GetBomConfig(string bomName) {
-            return BomConfiguration.BomCollection[bomName];
+        public void ReloadConfiguration() => LoadConfiguration();
+
+        public void CreateConfigurationFromAppConfig() {
+
+            if (ConfigurationExists) throw new ConfigurationException("Configuration file already exists");
+
+            System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+            ConfigurationSectionGroup configGroups = config.SectionGroups[Properties.Resources.APPLICATION_CONFIGURATION_SECTION];
+
+            Directory.CreateDirectory(ConfigurationFilePath);
+
+            XmlTextWriter xmlTextWriter = new XmlTextWriter(ConfigurationFilePath, Encoding.UTF8);
+            xmlTextWriter.WriteStartDocument(false);
+            xmlTextWriter.Formatting = Formatting.Indented;
+            xmlTextWriter.Indentation = 4;
+            xmlTextWriter.WriteStartElement(configGroups.SectionGroupName);
+            foreach (ConfigurationSection section in configGroups.Sections) {
+                xmlTextWriter.WriteNode(XmlReader.Create(new StringReader(section.SectionInformation.GetRawXml())), false);
+            }
+            xmlTextWriter.WriteEndElement();
+            xmlTextWriter.WriteEndDocument();
+            xmlTextWriter.Close();
+        }
+
+        public void UpdateFileConfigurations(string rootDirectory, string inputFolder, string outputFolder) {
+
+            if (XmlDocument == null) throw new Exception("Configuration has not been loaded");
+
+            FileConfiguration.RootDirectory = rootDirectory;
+            FileConfiguration.InputFolder = inputFolder;
+            FileConfiguration.OutputFolder = outputFolder;
+
+            string filePath = ConfigurationFilePath;
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+            string directory = Path.GetDirectoryName(fileName);
+            string extention = Path.GetExtension(fileName);
+            string tempFileName = Path.Combine(directory, fileName + "-temp" + extention);
+
+            StreamWriter outStream = new StreamWriter(File.OpenWrite(tempFileName));
+
+            XmlDocument.Save(outStream);
+
+            outStream.Close();
+
+            File.Delete(filePath);
+            File.Move(tempFileName, filePath);
+
+            ReloadConfiguration();
+        }
+
+        public void ValidateConfiguration() {
+
+            if (this.HasError) throw new XmlException("Configuration not loaded properly. " + this.Error.Message);
+
+            foreach (ConfigurationElementBom bom in this.BomConfiguration.BomCollection) {
+                foreach (ConfigurationElementColumn column in bom.ColumnCollection) {
+                    if (column.PopulationCollection != null) {
+                        foreach (ConfigurationElementPopulation population in column.PopulationCollection) {
+                            if (bom.ColumnCollection[population.ToColumn] == null) throw new InvalidExpressionException("boms." + bom.Name + ".fields." + column.Name + ".populations." + population.Name + ".toColumn references invalid column");
+                        }
+                    }
+                }
+            }
         }
     }
 }

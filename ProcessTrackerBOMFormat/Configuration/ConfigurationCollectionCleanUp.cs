@@ -1,23 +1,30 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using System.Xml;
 
-namespace Formatter.Configuration
-{
+namespace Formatter.Configuration {
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationCollectionCleanUp'
-    public class ConfigurationCollectionCleanUp : ConfigurationElementCollection
-    {
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationCollectionCleanUp'
+    public class ConfigurationCollectionCleanUp : ConfigurationElementCollection {
 
         /// <summary>
         /// Creates a collection with a single element as long 
         /// as the name is not and empty string.
         /// </summary>
-        public ConfigurationCollectionCleanUp()
-        {
+        public ConfigurationCollectionCleanUp() {
             ConfigurationElementCleanUp bom = (ConfigurationElementCleanUp)CreateNewElement();
-            if (!bom.Name.Equals(""))
-            {
+            if (!bom.Name.Equals("")) {
                 Add(bom);
+            }
+        }
+
+        public ConfigurationCollectionCleanUp(XmlNode node) {
+            foreach (XmlAttribute attribute in node.Attributes) {
+                if (Properties.Contains(attribute.Name))
+                    this[this.Properties[attribute.Name]] = this.Properties[attribute.Name].Converter.ConvertFrom(attribute.Value);
+            }
+            foreach (XmlNode childNode in node.ChildNodes) {
+                ConfigurationElementCleanUp bom = (ConfigurationElementCleanUp)Activator.CreateInstance(typeof(ConfigurationElementCleanUp), childNode);
+                if (bom.Name.Length != 0) this.BaseAdd(bom);
             }
         }
 
@@ -31,8 +38,7 @@ namespace Formatter.Configuration
         /// </summary>
         /// <remarks>It will create the element as a <c>ConfigurationElementCleanUp</c></remarks>
         /// <returns>A new configuration element of type ConfigurationElementCleanUp</returns>
-        protected override ConfigurationElement CreateNewElement()
-        {
+        protected override ConfigurationElement CreateNewElement() {
             return new ConfigurationElementCleanUp();
         }
 
@@ -41,14 +47,11 @@ namespace Formatter.Configuration
         /// </summary>
         /// <param name="element">The elment that you want the key of.</param>
         /// <returns>The key of the element.</returns>
-        protected override object GetElementKey(ConfigurationElement element)
-        {
+        protected override object GetElementKey(ConfigurationElement element) {
             return ((ConfigurationElementCleanUp)element).Name;
         }
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationCollectionCleanUp.this[int]'
         public ConfigurationElementCleanUp this[int index] {
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationCollectionCleanUp.this[int]'
             get { return (ConfigurationElementCleanUp)BaseGet(index); }
             set {
                 if (BaseGet(index) != null) BaseRemoveAt(index);
@@ -70,8 +73,7 @@ namespace Formatter.Configuration
         /// </summary>
         /// <param name="field">The element you wish to find the index of.</param>
         /// <returns>The index of the element.</returns>
-        public int IndexOf(ConfigurationElementCleanUp field)
-        {
+        public int IndexOf(ConfigurationElementCleanUp field) {
             return BaseIndexOf(field);
         }
 
@@ -79,8 +81,7 @@ namespace Formatter.Configuration
         /// Adds an element to the collection
         /// </summary>
         /// <param name="field">The element you wish to add</param>
-        public void Add(ConfigurationElementCleanUp field)
-        {
+        public void Add(ConfigurationElementCleanUp field) {
             BaseAdd(field);
         }
 
@@ -90,14 +91,11 @@ namespace Formatter.Configuration
         /// </summary>
         /// <param name="element">The element you wish to add</param>
         /// <see cref="ConfigurationElement"/>
-        protected override void BaseAdd(ConfigurationElement element)
-        {
+        protected override void BaseAdd(ConfigurationElement element) {
             BaseAdd(element, false);
         }
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationCollectionCleanUp.ElementName'
         protected override string ElementName {
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'ConfigurationCollectionCleanUp.ElementName'
             get { return "cleanup"; }
         }
     }

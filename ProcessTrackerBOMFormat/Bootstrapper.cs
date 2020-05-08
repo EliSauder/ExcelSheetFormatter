@@ -8,8 +8,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Xml;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Formatter {
@@ -45,20 +50,16 @@ namespace Formatter {
         protected override void OnStartup(object sender, StartupEventArgs e) {
 
             try {
+
                 IFormatterConfiguration configurations = _containter.GetInstance<IFormatterConfiguration>();
 
-                ConfigurationSectionBoms bomConfigurations = configurations.BomConfiguration;
-                ConfigurationSectionFiles fileConfigurations = configurations.FileConfiguration;
+                System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-                foreach (ConfigurationElementBom bom in bomConfigurations.BomCollection) {
-                    foreach (ConfigurationElementColumn column in bom.ColumnCollection) {
-                        if (column.PopulationCollection != null) {
-                            foreach (ConfigurationElementPopulation population in column.PopulationCollection) {
-                                if (bom.ColumnCollection[population.ToColumn] == null) throw new InvalidExpressionException("boms." + bom.Name + ".fields." + column.Name + ".populations." + population.Name + ".toColumn references invalid column");
-                            }
-                        }
-                    }
-                }
+                ConfigurationSectionGroup configGroups = config.SectionGroups[Properties.Resources.APPLICATION_CONFIGURATION_SECTION];
+
+                if (!configurations.ConfigurationExists) configurations.CreateConfigurationFromAppConfig();
+
+                configurations.ValidateConfiguration();
             } catch (Exception error) {
                 MessageBox.Show("Configuration Error:\n\n" + ErrorFormating.FormatException(error), "Configuration Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 Application.Current.Shutdown();
@@ -72,7 +73,6 @@ namespace Formatter {
             worker.RunWorkerAsync();
 
             DisplayRootViewFor<ShellViewModel>();
-            //DisplayRootViewFor<BomFormatDirectorySelectViewModel>();
         }
 
         protected override object GetInstance(Type service, string key) {
@@ -105,7 +105,6 @@ namespace Formatter {
                 wb.Close(0);
             }
         }
-
         public static void CloseExcelInstance() {
             if (_application != null) try {
                     ClearOpenWorkbooks();

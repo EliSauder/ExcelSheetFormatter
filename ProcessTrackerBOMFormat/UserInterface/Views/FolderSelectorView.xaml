@@ -3,15 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Formatter.UserInterface.Views"
+             xmlns:local="clr-namespace:Formatter.UserInterface.Views" xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:viewmodels="clr-namespace:Formatter.UserInterface.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="{Binding Path=LabelWidth}"/>
             <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -23,7 +22,8 @@
         <TextBlock FontSize="{Binding Path=LabelFontSize, Mode=OneWay}" 
                    Text="{Binding Path=LabelContent, Mode=OneWay}"
                    VerticalAlignment="Center"
-                   HorizontalAlignment="Left"
+                   HorizontalAlignment="Right"
+                   TextAlignment="Right"
                    Grid.Row="0" Grid.Column="0"/>
 
         <!-- Grid Column #2 -->
@@ -31,17 +31,20 @@
                  Text="{Binding Path=TextBoxContent, Mode=TwoWay}"
                  Grid.Column="2" Grid.Row="0" 
                  TextAlignment="Left" VerticalContentAlignment="Center"
-                 BorderBrush="#333" Background="#EEE" BorderThickness="2">
+                 BorderBrush="{Binding Path=BorderBrush, Mode=TwoWay}" Background="#EEE" 
+                 BorderThickness="1" HorizontalScrollBarVisibility="Auto">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="3"/>
                 </Style>
+                <system:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">7</system:Double>
             </TextBox.Resources>
         </TextBox>
 
         <!-- Grid Column #4 -->
-        <Button x:Name="Browse" Grid.Column="4" Grid.Row="0"
-                Background="Transparent" BorderThickness="0">
+        <Button x:Name="Browse" Grid.Column="3" Grid.Row="0"
+                Background="Transparent" BorderThickness="0" Padding="4" 
+                Margin="10 0 0 0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -53,7 +56,7 @@
 
                 <!-- Grid Row #0 -->
                 <Image Grid.Row="0" Grid.Column="0"
-                        Source="/BomFormatter;component/Resources/folder_blue.ico"/>
+                        Source="/UserControlLib;component/Resources/folder_blue.ico"/>
 
                 <!-- Grid Row # 1 -->
                 <TextBlock Grid.Row="1" Grid.Column="0" 
@@ -62,6 +65,11 @@
                            Text="Browse" TextAlignment="Center"
                            Foreground="#666"/>
             </Grid>
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="3"/>
+                </Style>
+            </Button.Resources>
         </Button>
     </Grid>
 </UserControl>
