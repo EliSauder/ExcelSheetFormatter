@@ -1,6 +1,9 @@
-﻿using System.Configuration;
+﻿using Formatter.Utility;
+using System;
+using System.Configuration;
+using System.Xml;
 
-namespace ProcessTrackerBOMFormat.Configuration {
+namespace Formatter.Configuration {
 
     /// <summary>
     /// <para>Class <c>ConfigurationElementBom</c> defines a bom configuration element.</para>  
@@ -18,26 +21,62 @@ namespace ProcessTrackerBOMFormat.Configuration {
         /// </value>
         [ConfigurationProperty("name", IsKey = true, IsRequired = true)]
         public string Name {
-            get { return (string)this["name"]; } 
-            set { this["name"] = value; } 
+            get { return (string)this["name"]; }
+            set {
+                if (string.IsNullOrEmpty(DisplayName)) DisplayName = value;
+                this["name"] = value;
+            }
+        }
+
+        /// <value>Proeprty <c>OutputType</c> is the type of output the program will use in the output file.</value>
+        /// <remarks>
+        /// <para>It is required.</para>
+        /// <para>Default value: INDIVIDUAL</para>
+        /// </remarks>
+        //TODO: Convert OutputType to an enum output. 
+        [ConfigurationProperty("outputType", DefaultValue = "INDIVIDUAL", IsRequired = true)]
+        public BomOutputType OutputType {
+            get { return (BomOutputType)base["outputType"]; }
+            set { base["outputType"] = value; }
+        }
+
+        /// <value>
+        /// Property <c>Name</c> defines the name of the bom. 
+        /// It is also the key for the bom collection
+        /// </value>
+        [ConfigurationProperty("displayName", IsKey = true, DefaultValue = "")]
+        public string DisplayName {
+            get { return (string)this["displayName"]; }
+            set { this["displayName"] = value; }
+        }
+
+        [ConfigurationProperty("outputSheetName", DefaultValue = "")]
+        public string OutputSheetName {
+            get { return (string)this["outputSheetName"]; }
+            set { this["outputSheetName"] = value; }
+        }
+
+        [ConfigurationProperty("inputFileExtention", IsRequired = true, DefaultValue = ".xlsx")]
+        [RegexStringValidator(@"\.xlsx|\.csv|\.xls")]
+        public string InputFileExtention {
+            get { return (string)this["inputFileExtention"]; }
+            set { this["inputFileExtention"] = value; }
         }
 
         /// <value>
         /// Property <c>Enabled</c> defines wether or not the bom in configuration will be checked/used or not.
         /// </value>
         [ConfigurationProperty("enabled", DefaultValue = true, IsRequired = false)]
-        public bool Enabled { 
+        public bool Enabled {
             get { return (bool)this["enabled"]; }
-            set { this["enabled"] = value; } 
+            set { this["enabled"] = value; }
         }
 
-        /// <value>
-        /// Property <c>UniqueKey</c> defines where in the excel file the program will 
-        /// look to find the value specified indicating that the file input is of the current bom type configured.
-        /// </value>
-        [ConfigurationProperty("uniqueKey")]
-        public ConfigurationElementUniqueKey UniqueKey {
-            get { return (ConfigurationElementUniqueKey)this["uniqueKey"]; }
+        [ConfigurationProperty("numberOfRowsToSkip", DefaultValue = 0, IsRequired = false)]
+        [IntegerValidator(MinValue = 0)]
+        public int NumberOfRowsToSkip {
+            get { return (int)this["numberOfRowsToSkip"]; }
+            set { this["numberOfRowsToSkip"] = value; }
         }
 
         /// <value>
@@ -49,13 +88,17 @@ namespace ProcessTrackerBOMFormat.Configuration {
             get { return (ConfigurationCollectionColumns)base["fields"]; }
         }
 
-        /// <value>
-        /// <para>Property <c>PopulationCollection</c> is a collection of population definitions that the program will execute.</para>
-        /// <para>Each population set one columns value to the value provided as long as a condition is true.</para>
-        /// </value>
-        [ConfigurationProperty("populations", IsDefaultCollection = false)]
-        public ConfigurationCollectionPopulations PopulationCollection {
-            get { return (ConfigurationCollectionPopulations)base["populations"]; }
+        public ConfigurationElementBom() { }
+
+        public ConfigurationElementBom(XmlNode node) {
+            foreach (XmlAttribute attribute in node.Attributes) {
+                if (Properties.Contains(attribute.Name))
+                    this[this.Properties[attribute.Name]] = this.Properties[attribute.Name].Converter.ConvertFrom(attribute.Value);
+            }
+            foreach (XmlNode childNode in node.ChildNodes) {
+                if (Properties.Contains(childNode.Name))
+                    this[childNode.Name] = Activator.CreateInstance(this[childNode.Name].GetType(), childNode);
+            }
         }
     }
 }

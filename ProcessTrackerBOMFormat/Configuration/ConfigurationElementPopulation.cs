@@ -1,7 +1,9 @@
-﻿using System.Configuration;
-using ProcessTrackerBOMFormat.Utility;
+﻿using Formatter.Utility;
+using System;
+using System.Configuration;
+using System.Xml;
 
-namespace ProcessTrackerBOMFormat.Configuration {
+namespace Formatter.Configuration {
 
     /// <summary>
     /// <para>Class <c>ConfigurationElementPopulation</c> defines a bom population event.</para>  
@@ -10,6 +12,19 @@ namespace ProcessTrackerBOMFormat.Configuration {
     /// </summary>
     /// <see cref="ConfigurationElement"/>
     public class ConfigurationElementPopulation : ConfigurationElement {
+
+        public ConfigurationElementPopulation() { }
+
+        public ConfigurationElementPopulation(XmlNode node) {
+            foreach (XmlAttribute attribute in node.Attributes) {
+                if (Properties.Contains(attribute.Name))
+                    this[Properties[attribute.Name]] = Properties[attribute.Name].Converter.ConvertFrom(attribute.Value);
+            }
+            foreach (XmlNode childNode in node.ChildNodes) {
+                if (Properties.Contains(childNode.Name))
+                    this[childNode.Name] = Activator.CreateInstance(this[childNode.Name].GetType(), childNode);
+            }
+        }
 
         /// <value>Property <c>Name</c> is the name of the population as well as the key for the collection</value>
         /// <remarks>
@@ -20,16 +35,6 @@ namespace ProcessTrackerBOMFormat.Configuration {
         public string Name {
             get { return (string)this["name"]; }
             set { this["name"] = value; }
-        }
-
-        /// <value>Property <c>CheckColumn</c> is the name of hte column that the program will be looking for the value in.</value>
-        /// <remarks>
-        /// <para>It is required.</para>
-        /// </remarks>
-        [ConfigurationProperty("checkColumn", IsRequired = true)]
-        public string CheckColumn {
-            get { return (string)this["checkColumn"]; }
-            set { this["checkColumn"] = value; }
         }
 
         /// <value>Property <c>Condition</c> is the condition that will be performed on the column values.</value>
@@ -45,9 +50,9 @@ namespace ProcessTrackerBOMFormat.Configuration {
 
         /// <value>Property <c>FindValue</c> is the value that the column value will be compared against.</value>
         /// <remarks>
-        /// <para>It is required.</para>
+        /// <para>Default value is "".</para>
         /// </remarks>
-        [ConfigurationProperty("findValue", IsRequired = true)]
+        [ConfigurationProperty("findValue", IsRequired = false, DefaultValue = "")]
         public string FindValue {
             get { return (string)this["findValue"]; }
             set { this["findValue"] = value; }
@@ -70,7 +75,7 @@ namespace ProcessTrackerBOMFormat.Configuration {
         /// <remarks>
         /// <para>It is required.</para>
         /// </remarks>
-        [ConfigurationProperty("toColumn", IsRequired = true)]
+        [ConfigurationProperty("toColumn", DefaultValue = "")]
         public string ToColumn {
             get { return (string)this["toColumn"]; }
             set { this["toColumn"] = value; }

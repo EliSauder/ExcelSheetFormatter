@@ -1,6 +1,8 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using System.Xml;
 
-namespace ProcessTrackerBOMFormat.Configuration {
+namespace Formatter.Configuration {
 
     /// <summary>
     /// Class <c>ConfigurationCollectionPopulations</c> defines a 
@@ -9,6 +11,24 @@ namespace ProcessTrackerBOMFormat.Configuration {
     /// </summary>
     /// <see cref="ConfigurationElementCollection"/>
     public class ConfigurationCollectionPopulations : ConfigurationElementCollection {
+
+        public ConfigurationCollectionPopulations() {
+            ConfigurationElementPopulation bom = (ConfigurationElementPopulation)CreateNewElement();
+            if (!bom.Name.Equals("")) {
+                BaseAdd(bom);
+            }
+        }
+
+        public ConfigurationCollectionPopulations(XmlNode node) {
+            foreach (XmlAttribute attribute in node.Attributes) {
+                if (Properties.Contains(attribute.Name))
+                    this[this.Properties[attribute.Name]] = this.Properties[attribute.Name].Converter.ConvertFrom(attribute.Value);
+            }
+            foreach (XmlNode childNode in node.ChildNodes) {
+                ConfigurationElementPopulation bom = (ConfigurationElementPopulation)Activator.CreateInstance(typeof(ConfigurationElementPopulation), childNode);
+                if (bom.Name.Length != 0) this.BaseAdd(bom);
+            }
+        }
 
         /// <value>Property <c>CollectionType</c> Represents the type of the current collection.</value>
         public override ConfigurationElementCollectionType CollectionType {
@@ -32,6 +52,7 @@ namespace ProcessTrackerBOMFormat.Configuration {
         protected override object GetElementKey(ConfigurationElement element) {
             return ((ConfigurationElementPopulation)element).Name;
         }
+
 
         /// <summary>
         /// Gets the element at the index specified.

@@ -1,6 +1,11 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Xml;
 
-namespace ProcessTrackerBOMFormat.Configuration {
+namespace Formatter.Configuration {
 
     /// <summary>
     /// Class <c>ConfigurationCollectionColumns</c> defines a 
@@ -8,7 +13,20 @@ namespace ProcessTrackerBOMFormat.Configuration {
     /// that defines a collection of BOM columns.
     /// </summary>
     /// <see cref="ConfigurationElementCollection"/>
-    public class ConfigurationCollectionColumns : ConfigurationElementCollection {
+    public class ConfigurationCollectionColumns : ConfigurationElementCollection, ICollection<ConfigurationElementColumn>, IEnumerator<ConfigurationElementColumn> {
+
+        public ConfigurationCollectionColumns() { }
+
+        public ConfigurationCollectionColumns(XmlNode node) {
+            foreach (XmlAttribute attribute in node.Attributes) {
+                if (Properties.Contains(attribute.Name))
+                    this[this.Properties[attribute.Name]] = this.Properties[attribute.Name].Converter.ConvertFrom(attribute.Value);
+            }
+            foreach (XmlNode childNode in node.ChildNodes) {
+                ConfigurationElementColumn bom = (ConfigurationElementColumn)Activator.CreateInstance(typeof(ConfigurationElementColumn), childNode);
+                if (bom.Name.Length != 0) this.BaseAdd(bom);
+            }
+        }
 
         /// <value>Property <c>CollectionType</c> Represents the type of the current collection.</value>
         public override ConfigurationElementCollectionType CollectionType {
@@ -78,6 +96,41 @@ namespace ProcessTrackerBOMFormat.Configuration {
             return -1;
         }
 
+        public void Add(ConfigurationElementColumn item) => BaseAdd(item);
+
+        public void Clear() => BaseClear();
+
+        public bool Contains(ConfigurationElementColumn item) => IndexOf(item) != -1;
+
+        public void CopyTo(ConfigurationElementColumn[] array, int arrayIndex) {
+            for (int i = 0; i < this.Count; i++) 
+                array[i + arrayIndex] = this[i];
+        }
+
+        public bool Remove(ConfigurationElementColumn item) {
+            if (Contains(item)) {
+                BaseRemove(item);
+                return true;
+            }
+            return false;
+        }
+
+        IEnumerator<ConfigurationElementColumn> IEnumerable<ConfigurationElementColumn>.GetEnumerator() {
+            return this;
+        }
+
+        public void Dispose() { }
+
+        public bool MoveNext() {
+            if (_currentElement + 1 > this.Count - 1) return false;
+            _currentElement++;
+            return true;
+        }
+
+        public void Reset() {
+            _currentElement = 0;
+        }
+
         /// <summary>
         /// Gets the name of the elements expected. This is the inner xml titles.
         /// </summary>
@@ -92,5 +145,13 @@ namespace ProcessTrackerBOMFormat.Configuration {
         protected override string ElementName {
             get { return "field"; }
         }
+
+        private int _currentElement = 0;
+
+        bool ICollection<ConfigurationElementColumn>.IsReadOnly => false;
+
+        public ConfigurationElementColumn Current => this[_currentElement];
+
+        object IEnumerator.Current => Current;
     }
 }

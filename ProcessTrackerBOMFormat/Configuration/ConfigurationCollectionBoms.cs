@@ -1,6 +1,9 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Collections;
+using System.Configuration;
+using System.Xml;
 
-namespace ProcessTrackerBOMFormat.Configuration {
+namespace Formatter.Configuration {
 
     /// <summary>
     /// Class <c>ConfigurationCollectionBoms</c> defines a 
@@ -8,6 +11,7 @@ namespace ProcessTrackerBOMFormat.Configuration {
     /// that defines a collection of BOMs.
     /// </summary>
     /// <see cref="ConfigurationElementCollection"/>
+    [ConfigurationCollection(typeof(ConfigurationElementBom), CollectionType = ConfigurationElementCollectionType.BasicMapAlternate)]
     public class ConfigurationCollectionBoms : ConfigurationElementCollection {
 
         /// <summary>
@@ -16,8 +20,23 @@ namespace ProcessTrackerBOMFormat.Configuration {
         /// </summary>
         public ConfigurationCollectionBoms() {
             ConfigurationElementBom bom = (ConfigurationElementBom)CreateNewElement();
-            if(!bom.Name.Equals("")) {
+            if (!bom.Name.Equals("")) {
                 Add(bom);
+            }
+        }
+
+        /// <summary>
+        /// Creates collection of boms from an xml node.
+        /// </summary>
+        /// <param name="node">The XML node containing the collection of BOMS</param>
+        public ConfigurationCollectionBoms(XmlNode node) {
+            foreach (XmlAttribute attribute in node.Attributes) {
+                if (Properties.Contains(attribute.Name))
+                    this[this.Properties[attribute.Name]] = this.Properties[attribute.Name].Converter.ConvertFrom(attribute.Value);
+            }
+            foreach (XmlNode childNode in node.ChildNodes) {
+                ConfigurationElementBom bom = (ConfigurationElementBom)Activator.CreateInstance(typeof(ConfigurationElementBom), childNode);
+                if (bom.Name.Length != 0) this.BaseAdd(bom);
             }
         }
 
@@ -43,6 +62,7 @@ namespace ProcessTrackerBOMFormat.Configuration {
         protected override object GetElementKey(ConfigurationElement element) {
             return ((ConfigurationElementBom)element).Name;
         }
+
 
         /// <summary>
         /// Gets the element at the index specified.
@@ -105,8 +125,6 @@ namespace ProcessTrackerBOMFormat.Configuration {
         ///         &lt;/base&gt;    
         ///     </code>
         /// </example>
-        protected override string ElementName {
-            get { return "bom"; }
-        }
+        protected override string ElementName => "bom";
     }
 }
