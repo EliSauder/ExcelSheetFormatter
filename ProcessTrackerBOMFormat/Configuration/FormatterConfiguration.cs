@@ -16,6 +16,7 @@ namespace Formatter.Configuration {
         public XmlDocument XmlDocument = null;
         public ConfigurationSectionBoms BomConfiguration { get; private set; } = null;
         public ConfigurationSectionFiles FileConfiguration { get; private set; } = null;
+        public ConfigurationSectionParsing ParsingConfiguration { get; private set; } = null;
         public string InputFolderPath => Path.Combine(FileConfiguration.RootDirectory, FileConfiguration.InputFolder);
         public string OutputFolderPath => Path.Combine(FileConfiguration.RootDirectory, FileConfiguration.OutputFolder);
         public Exception Error { get; private set; } = null;
@@ -54,6 +55,7 @@ namespace Formatter.Configuration {
             XmlNode node = XmlDocument.SelectSingleNode(Properties.Resources.APPLICATION_CONFIGURATION_SECTION);
             this.BomConfiguration = new ConfigurationSectionBoms(node);
             this.FileConfiguration = new ConfigurationSectionFiles(node);
+            this.ParsingConfiguration = new ConfigurationSectionParsing(node);
         }
 
         public void ReloadConfiguration() => LoadConfiguration();
@@ -66,7 +68,9 @@ namespace Formatter.Configuration {
 
             ConfigurationSectionGroup configGroups = config.SectionGroups[Properties.Resources.APPLICATION_CONFIGURATION_SECTION];
 
-            Directory.CreateDirectory(ConfigurationFilePath);
+            string directoryPath = Path.GetDirectoryName(ConfigurationFilePath);
+
+            Directory.CreateDirectory(directoryPath);
 
             XmlTextWriter xmlTextWriter = new XmlTextWriter(ConfigurationFilePath, Encoding.UTF8);
             xmlTextWriter.WriteStartDocument(false);
@@ -79,16 +83,11 @@ namespace Formatter.Configuration {
             xmlTextWriter.WriteEndElement();
             xmlTextWriter.WriteEndDocument();
             xmlTextWriter.Close();
+
+            LoadConfiguration();
         }
 
-        public void UpdateFileConfigurations(string rootDirectory, string inputFolder, string outputFolder) {
-
-            if (XmlDocument == null) throw new Exception("Configuration has not been loaded");
-
-            FileConfiguration.RootDirectory = rootDirectory;
-            FileConfiguration.InputFolder = inputFolder;
-            FileConfiguration.OutputFolder = outputFolder;
-
+        public void UpdateConfigurationFile() {
             string filePath = ConfigurationFilePath;
             string fileName = Path.GetFileNameWithoutExtension(filePath);
             string directory = Path.GetDirectoryName(fileName);
@@ -103,6 +102,17 @@ namespace Formatter.Configuration {
 
             File.Delete(filePath);
             File.Move(tempFileName, filePath);
+        }
+
+        public void UpdateFileConfigurations(string rootDirectory, string inputFolder, string outputFolder) {
+
+            if (XmlDocument == null) throw new Exception("Configuration has not been loaded");
+
+            FileConfiguration.RootDirectory = rootDirectory;
+            FileConfiguration.InputFolder = inputFolder;
+            FileConfiguration.OutputFolder = outputFolder;
+
+            UpdateConfigurationFile();
 
             ReloadConfiguration();
         }
@@ -120,6 +130,29 @@ namespace Formatter.Configuration {
                     }
                 }
             }
+        }
+
+        public void UpdateConfigurationFileFromAppConfig() {
+
+            System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            ConfigurationSectionGroup configGroups = config.SectionGroups[Properties.Resources.APPLICATION_CONFIGURATION_SECTION];
+            XmlNode parentNode = null;
+            foreach (XmlNode node in XmlDocument.ChildNodes) {
+                parentNode = node.Name.Equals(Properties.Resources.APPLICATION_CONFIGURATION_SECTION) ? node : parentNode;
+            }
+
+
+            foreach (ConfigurationSection section in configGroups.Sections) {
+                XmlNode xmlSection = null;
+                foreach (XmlNode childNode in parentNode.ChildNodes) {
+                    if (childNode.Name.Equals(section.SectionInformation.Name)) {
+                        xmlSection = childNode;
+                    }
+                }
+                if (xmlSection == null) parentNode.InnerXml += section.SectionInformation.GetRawXml();
+            }
+
+            UpdateConfigurationFile();
         }
     }
 }

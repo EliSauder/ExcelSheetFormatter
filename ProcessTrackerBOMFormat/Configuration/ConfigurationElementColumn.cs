@@ -47,6 +47,12 @@ namespace Formatter.Configuration {
             set { this["identifierOrder"] = value; }
         }
 
+        [ConfigurationProperty("splitInto", IsRequired = false, DefaultValue = -1)]
+        public int SplitInto {
+            get { return (int)this["splitInto"]; }
+            set { this["splitInto"] = value; }
+        }
+
         /// <value>Property <c>IsQuantity</c> defines whether or not the column is a quantity.</value>
         /// <remarks>
         /// <para>Default value is False</para>
@@ -83,7 +89,7 @@ namespace Formatter.Configuration {
         /// <remarks>
         /// <para>Default value is " ".</para>
         /// </remarks>
-        [ConfigurationProperty("delimiter", DefaultValue = " ")]
+        [ConfigurationProperty("delimiter", DefaultValue = "")]
         public string Delimiter {
             get { return (string)this["delimiter"]; }
             set { this["delimiter"] = value; }

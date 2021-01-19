@@ -72,6 +72,13 @@ namespace Formatter.Configuration {
             set { this["enabled"] = value; }
         }
 
+        [ConfigurationProperty("numberOfRowsToSkip", DefaultValue = 0, IsRequired = false)]
+        [IntegerValidator(MinValue = 0)]
+        public int NumberOfRowsToSkip {
+            get { return (int)this["numberOfRowsToSkip"]; }
+            set { this["numberOfRowsToSkip"] = value; }
+        }
+
         /// <value>
         /// <para>Property <c>ColumnCollection</c> is a collection of columns that the program will look for.</para>
         /// <para>Each column will contain the information needed for the program to perform the defined actions</para>

@@ -19,8 +19,8 @@ namespace Formatter.Configuration {
             }
 
             foreach (XmlNode childNode in node.ChildNodes) {
-                if(this.Properties.Contains(childNode.Name))
-                    this[childNode.Name] = Activator.CreateInstance(this[childNode.Name].GetType(), childNode);
+                if(childNode.Name.Equals("boms"))
+                    BomCollection = (ConfigurationCollectionBoms)Activator.CreateInstance(typeof(ConfigurationCollectionBoms), childNode);
             }
         }
 
@@ -28,15 +28,15 @@ namespace Formatter.Configuration {
         /// <remarks>
         /// <para>It is the default collection.</para>
         /// </remarks>
-        [ConfigurationProperty("boms", IsDefaultCollection = true)]
-        [ConfigurationCollection(typeof(ConfigurationCollectionBoms))]
+        [ConfigurationProperty("", IsDefaultCollection = true)]
+        //[ConfigurationCollection(typeof(ConfigurationCollectionBoms))]
         public ConfigurationCollectionBoms BomCollection {
             get {
-                ConfigurationCollectionBoms bomCollection = (ConfigurationCollectionBoms)base["boms"];
+                ConfigurationCollectionBoms bomCollection = (ConfigurationCollectionBoms)base[""];
                 return bomCollection;
             }
             private set {
-                base["boms"] = value;
+                base[""] = value;
             }
         }
     }

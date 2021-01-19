@@ -175,6 +175,7 @@
     <Compile Include="Configuration\ConfigurationElementException.cs" />
     <Compile Include="Configuration\ConfigurationException.cs" />
     <Compile Include="Configuration\ConfigurationSectionFiles.cs" />
+    <Compile Include="Configuration\ConfigurationSectionParsing.cs" />
     <Compile Include="Configuration\FormatterConfiguration.cs" />
     <Compile Include="Configuration\IFormatterConfiguration.cs" />
     <Compile Include="Data\BomDataCell.cs" />

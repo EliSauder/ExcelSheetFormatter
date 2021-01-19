@@ -1,33 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Formatter.Configuration;
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
-namespace Formatter.UserInterface.Models
-{
-    public class ProductNumberModel
-    {
+namespace Formatter.UserInterface.Models {
+    public class ProductNumberModel {
 
         public const string PRODUCT_NUMBER_REGEX = @"^((?:G|T|K)\d{5}(?:(?=-)-\d{1,3}(?:(?=[A-Z])[A-Z]\d|)|)|(?:V)?\d{6,7}Z)$";
 
-        private string _productNumber = "";
+        private readonly Regex _regex = null;
+
+        public ProductNumberModel(IFormatterConfiguration configuration) {
+            _regex = new Regex(configuration.ParsingConfiguration.ProdutRegex);
+        }
 
         [Required]
-        [RegularExpression(PRODUCT_NUMBER_REGEX,
-            ErrorMessage = "Product is not valid. Product number must match the following regex: " + PRODUCT_NUMBER_REGEX)]
-        public string ProductNumber {
-            get { return this._productNumber; }
-            set { this._productNumber = value; }
-        }
+        public string ProductNumber { get; set; } = "";
 
-        public bool validateProductNumber()
-        {
-            Regex prodReg = new Regex(PRODUCT_NUMBER_REGEX);
-            return prodReg.IsMatch(_productNumber);
-        }
-
-        public static bool validateProductNumber(string productNumber)
-        {
-            Regex prodReg = new Regex(PRODUCT_NUMBER_REGEX);
-            return prodReg.IsMatch(productNumber);
+        public bool validateProductNumber() {
+            return _regex.IsMatch(ProductNumber);
         }
     }
 }

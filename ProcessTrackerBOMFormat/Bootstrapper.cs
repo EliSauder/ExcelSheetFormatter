@@ -59,6 +59,8 @@ namespace Formatter {
 
                 if (!configurations.ConfigurationExists) configurations.CreateConfigurationFromAppConfig();
 
+                configurations.UpdateConfigurationFileFromAppConfig();
+
                 configurations.ValidateConfiguration();
             } catch (Exception error) {
                 MessageBox.Show("Configuration Error:\n\n" + ErrorFormating.FormatException(error), "Configuration Error", MessageBoxButton.OK, MessageBoxImage.Error);

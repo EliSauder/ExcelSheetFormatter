@@ -95,6 +95,9 @@ namespace Formatter.Configuration {
             BaseAdd(element, false);
         }
 
+        /// <summary>
+        /// The name of the element.
+        /// </summary>
         protected override string ElementName {
             get { return "cleanup"; }
         }

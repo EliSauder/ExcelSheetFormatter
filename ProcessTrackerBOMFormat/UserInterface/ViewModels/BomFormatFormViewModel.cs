@@ -9,12 +9,13 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Dynamic;
+using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 
 namespace Formatter.UserInterface.ViewModels {
     public class BomFormatFormViewModel : Screen, IBomFormatChild {
-        private ProductNumberModel _productNumber = new ProductNumberModel();
+        private ProductNumberModel _productNumber = null;
 
         public string ProductNumber {
             get { return _productNumber.ProductNumber; }
@@ -47,7 +48,10 @@ namespace Formatter.UserInterface.ViewModels {
             this._container = container;
             _popUpViewModelFactory = popUpViewFactory;
 
-            BomSelectionModel = new BomSelectionModel(_container.GetInstance<IFormatterConfiguration>());
+            IFormatterConfiguration config = _container.GetInstance<IFormatterConfiguration>();
+
+            _productNumber = new ProductNumberModel(config);
+            BomSelectionModel = new BomSelectionModel(config);
 
             Activated += (object sender, ActivationEventArgs e) => {
                 IFormatterConfiguration configuration = _container.GetInstance<IFormatterConfiguration>();

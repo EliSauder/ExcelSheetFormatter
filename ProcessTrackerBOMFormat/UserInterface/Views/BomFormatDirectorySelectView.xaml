@@ -20,11 +20,11 @@
             <RowDefinition Height="20"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="45"/>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="45"/>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="45"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 

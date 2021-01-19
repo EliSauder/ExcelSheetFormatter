@@ -1,46 +1,42 @@
 ﻿using ExcelDataReader;
+using Formatter.Configuration;
 using Formatter.UserInterface.Models;
 using System.Data;
 using System.IO;
 
-namespace Formatter.Processing
-{
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'BomInput'
-    public class BomInput
-    {
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'BomInput'
+namespace Formatter.Processing {
+    public class BomInput {
 
         private string _sheetName = "";
         private DataTable _inputData = null;
         private ProductNumberModel _productNumber = null;
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'BomInput.BomInput(ProductNumberModel, string, string)'
-        public BomInput(ProductNumberModel productNumber, string absoluteInputFolderPath, string fileExtention)
-        {
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'BomInput.BomInput(ProductNumberModel, string, string)'
+        public BomInput(ProductNumberModel productNumber, string absoluteInputFolderPath, string fileExtention, ConfigurationElementBom selectedBomConfig) {
 
             _productNumber = productNumber;
 
-            string filePath = absoluteInputFolderPath + _productNumber.ProductNumber + fileExtention;
+            string filePath = Path.Combine(absoluteInputFolderPath, _productNumber.ProductNumber + fileExtention);
             //_sheetName = GetSheetName(filePath, 1);
 
             FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             IExcelDataReader excelFile = ExcelReaderFactory.CreateReader(fileStream);
 
-            DataSet dataSet = excelFile.AsDataSet(new ExcelDataSetConfiguration()
-            {
+            DataSet dataSet = excelFile.AsDataSet(new ExcelDataSetConfiguration() {
                 UseColumnDataType = true,
                 FilterSheet = (tableReader, sheetIndex) => true,
-                ConfigureDataTable = (tableReader) => new ExcelDataTableConfiguration()
-                {
+                ConfigureDataTable = (tableReader) => new ExcelDataTableConfiguration() {
                     EmptyColumnNamePrefix = "Column",
                     UseHeaderRow = true,
-                    FilterRow = (rowReader) =>
-                    {
+                    FilterRow = (rowReader) => {
                         return true;
                     },
-                    FilterColumn = (rowReader, columnIndex) =>
-                    {
+                    ReadHeaderRow = (rowReader) => {
+                        // F.ex skip the first n rows and use n+1 row as the header
+                        for(int i = 0; i < selectedBomConfig.NumberOfRowsToSkip; i++) 
+                            rowReader.Read();
+                    },
+
+                    FilterColumn = (rowReader, columnIndex) => {
                         return true;
                     }
                 }
@@ -50,21 +46,15 @@ namespace Formatter.Processing
             _sheetName = _inputData.TableName;
         }
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'BomInput.InputData'
         public DataTable InputData {
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'BomInput.InputData'
             get { return _inputData; }
         }
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'BomInput.SheetName'
         public string SheetName {
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'BomInput.SheetName'
             get { return _sheetName; }
         }
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member 'BomInput.ProductNumber'
         public ProductNumberModel ProductNumber {
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'BomInput.ProductNumber'
             get { return _productNumber; }
         }
     }

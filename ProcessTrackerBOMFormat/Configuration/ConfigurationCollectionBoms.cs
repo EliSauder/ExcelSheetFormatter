@@ -11,6 +11,7 @@ namespace Formatter.Configuration {
     /// that defines a collection of BOMs.
     /// </summary>
     /// <see cref="ConfigurationElementCollection"/>
+    [ConfigurationCollection(typeof(ConfigurationElementBom), CollectionType = ConfigurationElementCollectionType.BasicMapAlternate)]
     public class ConfigurationCollectionBoms : ConfigurationElementCollection {
 
         /// <summary>
@@ -24,6 +25,10 @@ namespace Formatter.Configuration {
             }
         }
 
+        /// <summary>
+        /// Creates collection of boms from an xml node.
+        /// </summary>
+        /// <param name="node">The XML node containing the collection of BOMS</param>
         public ConfigurationCollectionBoms(XmlNode node) {
             foreach (XmlAttribute attribute in node.Attributes) {
                 if (Properties.Contains(attribute.Name))
@@ -120,8 +125,6 @@ namespace Formatter.Configuration {
         ///         &lt;/base&gt;    
         ///     </code>
         /// </example>
-        protected override string ElementName {
-            get { return "bom"; }
-        }
+        protected override string ElementName => "bom";
     }
 }
